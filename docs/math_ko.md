@@ -9,7 +9,7 @@
 - $`\{B\}`$: 로봇 받침 좌표계 (= Isaac Lab 환경 좌표계). $`+x`$ 앞, $`+y`$ 왼쪽, $`+z`$ 위. 받침의 world 자리는 $`(-0.66,\,0,\,0.912)`$ m, 책상 윗면은 $`z_w = 0.900`$ m.
 - 위에서 아래로 쥐는 TCP 좌표계: $`z_{tcp} = -\hat z`$, $`x_{tcp}`$ = 손목 방향(yaw), 손가락은 $`y_{tcp}`$ 방향으로 벌어진다.
 - 제어 한 스텝 $`\Delta t = 4 \times \tfrac{1}{120} \approx 0.0333`$ s → 30 Hz (물리 4 스텝마다 한 번 기록).
-- $`[\,v\,]_\times`$: 벡터 $`v`$ 의 외적 행렬. $`\operatorname{Exp}`$ · $`\operatorname{Log}`$: 회전 행렬과 회전 벡터 사이의 지수 · 로그 사상.
+- $`[\,v\,]_\times`$: 벡터 $`v`$ 의 외적 행렬. $`\mathrm{Exp}`$ · $`\mathrm{Log}`$: 회전 행렬과 회전 벡터 사이의 지수 · 로그 사상.
 
 ### 4-2. 핀홀 투영
 
@@ -57,7 +57,7 @@ r_{vp} = 0.3\,\big(\pi_{dir}(-\hat x) - (398,\,0)\big)
 **FR3:** 3번 · 5번 관절을 0으로 두고 5개 관절만 풂.
 
 ```math
-\min_{q}\;\big\lVert\, 10\,(p(q) - p_h) \,\big\rVert^2 + \big\lVert \operatorname{vec}\!\big(R(q) - R_{down}\big) \big\rVert^2
+\min_{q}\;\big\lVert\, 10\,(p(q) - p_h) \,\big\rVert^2 + \big\lVert \mathrm{vec}\!\big(R(q) - R_{down}\big) \big\rVert^2
 ```
 
 → $`q = [2.8,\,-16.0,\,0,\,-150.9,\,0,\,134.9,\,47.8]^\circ`$.
@@ -130,7 +130,7 @@ $`R = 15`$, $`c = 0.25`$ mm 이면 $`r_0 = 6.57`$ mm, 높이 6 mm에서 반지�
 2. **도달 고리:** 두 로봇 받침에서 원래 Rack의 양 끝 구멍과 빈 Rack의 4개 구멍이 모두
 
 ```math
-0.38 \le \sqrt{x^2+y^2} \le 0.76\ \text{m}, \qquad |\operatorname{atan2}(y,x)| \le 70^\circ
+0.38 \le \sqrt{x^2+y^2} \le 0.76\ \text{m}, \qquad |\mathrm{atan2}(y,x)| \le 70^\circ
 ```
 
    (역기구학 확인은 계획 단계에서 두 로봇 모두 한다 — 6-8절)
@@ -144,7 +144,7 @@ $`R = 15`$, $`c = 0.25`$ mm 이면 $`r_0 = 6.57`$ mm, 높이 6 mm에서 반지�
 시작 자세의 로봇 링크를 캡슐 $`(a_j, b_j, \rho_j)`$ (선분 + 반지름) 로 어림한다. 카메라 $`c`$ 에서 확인 점 $`X`$ 까지의 시선 선분 $`\overline{cX}`$ 와 각 캡슐 선분 사이 최소 거리(Ericson의 선분–선분 거리)가 반지름보다 작으면 가린 것이다.
 
 ```math
-\text{가림} \iff \exists j:\ \operatorname{dist}\big(\overline{cX},\ \overline{a_j b_j}\big) < \rho_j
+\text{가림} \iff \exists j:\ \mathrm{dist}\big(\overline{cX},\ \overline{a_j b_j}\big) < \rho_j
 ```
 
 FR5 링크 반지름 [0.075, 0.065, 0.06, 0.05, 0.05, 0.05] m, 플랜지→TCP 0.06 m, 손가락 막대 반지름 0.035 m. Franka 링크 8개 0.07 m.
@@ -170,7 +170,7 @@ K = \frac{1}{U\!\left(\tfrac{1}{8500},\ \tfrac{1}{5000}\right)}
 - **좌우 조합 · 링 구멍:** 짝 수집에서는 장면 번호 $`n`$ 으로 정한다. 4장면을 한 묶음으로 4가지를 한 번씩 섞는다.
 
 ```math
-\text{choice}(n) = \operatorname{perm}_4\big(\text{rng}[\,s,\ \lfloor (n-1)/4 \rfloor,\ \text{salt}\,]\big)\big[(n-1) \bmod 4\big]
+\text{choice}(n) = \mathrm{perm}_4\big(\text{rng}[\,s,\ \lfloor (n-1)/4 \rfloor,\ \text{salt}\,]\big)\big[(n-1) \bmod 4\big]
 ```
 
   (조합 salt 7, 링 구멍 salt 11). 4장면마다 각 경우가 정확히 한 번 나온다.
@@ -242,20 +242,20 @@ B(u)=(1-u)^2P_1+2u(1-u)\,b+u^2P_2,\qquad u\in[0,1]
 꼭짓점 자신이 조절점이라 곡선이 두 변에 접한다. 둥글린 길을 촘촘한 꺾은선 $`S_k`$ 로 만들고 누적 길이 $`d_k`$ 로 진행률을 호 길이에 맞춘다.
 
 ```math
-p(s)=\operatorname{lerp}\big(sL;\ d_k,\ S_k\big),\qquad L=d_{end},\ s\in[0,1]
+p(s)=\mathrm{lerp}\big(sL;\ d_k,\ S_k\big),\qquad L=d_{end},\ s\in[0,1]
 ```
 
-**적용.** 다가가기 경유점 $`via = \tfrac12(p_0+p_{pre}) + (v_x, v_y, h_{arc})`$, $`v_{x,y} \sim U(\pm 0.03)`$, $`h_{arc} \sim U(0,\ 0.04)`$ m. 둥글림 거리 0.06 · 0.03 m(다가가기), 0.04 · 0.06 · 0.04 m(옮기기). 역기구학은 $`M = \operatorname{clip}(\lceil L/0.004\rceil + \lceil\theta_{deg}/2\rceil,\ 24,\ 4000)`$ 개 점에서 풀고, 사이는 관절 공간에서 선형 보간한다.
+**적용.** 다가가기 경유점 $`via = \tfrac12(p_0+p_{pre}) + (v_x, v_y, h_{arc})`$, $`v_{x,y} \sim U(\pm 0.03)`$, $`h_{arc} \sim U(0,\ 0.04)`$ m. 둥글림 거리 0.06 · 0.03 m(다가가기), 0.04 · 0.06 · 0.04 m(옮기기). 역기구학은 $`M = \mathrm{clip}(\lceil L/0.004\rceil + \lceil\theta_{deg}/2\rceil,\ 24,\ 4000)`$ 개 점에서 풀고, 사이는 관절 공간에서 선형 보간한다.
 
 ### 6-4. 자세 보간 — SO(3) 지수 · 로그
 
 두 자세 $`R_0 \to R_1`$ 사이를 측지선으로 잇는다.
 
 ```math
-\omega=\operatorname{Log}\!\big(R_1R_0^\top\big),\qquad R(s)=\operatorname{Exp}\!\big(u(s)\,\omega\big)\,R_0
+\omega=\mathrm{Log}\!\big(R_1R_0^\top\big),\qquad R(s)=\mathrm{Exp}\!\big(u(s)\,\omega\big)\,R_0
 ```
 
-$`\operatorname{Exp}`$ 는 로드리게스 식 $`I+\sin\theta\,[\hat k]_\times+(1-\cos\theta)[\hat k]_\times^2`$, $`\operatorname{Log}`$ 는 $`\theta=\arccos\big((\operatorname{tr}R-1)/2\big)`$, $`\omega=\frac{\theta}{2\sin\theta}(R_{32}-R_{23},\ R_{13}-R_{31},\ R_{21}-R_{12})`$ ($`\theta \approx \pi`$ 에서는 $`(R+I)/2`$ 의 열로 따로 계산). 두 자세가 모두 아래를 보면 $`R_1R_0^\top = R_z(\Delta\psi)`$ 라 **수직 축으로만** 돈다.
+$`\mathrm{Exp}`$ 는 로드리게스 식 $`I+\sin\theta\,[\hat k]_\times+(1-\cos\theta)[\hat k]_\times^2`$, $`\mathrm{Log}`$ 는 $`\theta=\arccos\big((\mathrm{tr}R-1)/2\big)`$, $`\omega=\frac{\theta}{2\sin\theta}(R_{32}-R_{23},\ R_{13}-R_{31},\ R_{21}-R_{12})`$ ($`\theta \approx \pi`$ 에서는 $`(R+I)/2`$ 의 열로 따로 계산). 두 자세가 모두 아래를 보면 $`R_1R_0^\top = R_z(\Delta\psi)`$ 라 **수직 축으로만** 돈다.
 
 진행 함수 $`u(s)`$ 는 두 가지다.
 
@@ -322,7 +322,7 @@ $`a_z < \cos 12^\circ`$ 이면 수직으로 내린다. 튜브가 $`\theta`$ 기�
 **FR3 (7축, 수치):** 감쇠 최소제곱 + 영공간에서 시작 자세 쪽으로.
 
 ```math
-e=\begin{bmatrix}p^*-p\\ \operatorname{Log}(R^*R^\top)\end{bmatrix},\qquad
+e=\begin{bmatrix}p^*-p\\ \mathrm{Log}(R^*R^\top)\end{bmatrix},\qquad
 J_{:,i}=\begin{bmatrix}z_i\times(p-o_i)\\ z_i\end{bmatrix}
 ```
 
@@ -335,7 +335,7 @@ J_{:,i}=\begin{bmatrix}z_i\times(p-o_i)\\ z_i\end{bmatrix}
 **FR5 (6축, 해석해):** UR형 해법으로 최대 8개 해.
 
 ```math
-\theta_1=\operatorname{atan2}(p_{05,y},\,p_{05,x})\pm\arccos\!\big(d_4/r\big)+\tfrac{\pi}{2},\qquad
+\theta_1=\mathrm{atan2}(p_{05,y},\,p_{05,x})\pm\arccos\!\big(d_4/r\big)+\tfrac{\pi}{2},\qquad
 \theta_5=\pm\arccos\!\Big(\frac{p_x\sin\theta_1-p_y\cos\theta_1-d_4}{d_6}\Big)
 ```
 
@@ -379,7 +379,7 @@ d_{ax}\le 2\ \text{mm},\qquad r_z<z_{floor}+10\ \text{mm},\qquad \arccos R_{33}<
 ```math
 T_{tube}=T_{tcp}\,{}^{tcp}T_{tube},\qquad
 v=\frac{p_t-p_{t-1}}{\Delta t},\qquad
-\omega=\frac{\operatorname{Log}\!\big(R_tR_{t-1}^\top\big)}{\Delta t}
+\omega=\frac{\mathrm{Log}\!\big(R_tR_{t-1}^\top\big)}{\Delta t}
 ```
 
 ```math
@@ -399,7 +399,7 @@ v_{tube,z}\mathrel{+}=g\,\Delta t\,\frac{n+1}{2n}
 \text{rot6d}=[\,R_{11},\,R_{12},\,R_{13},\,R_{21},\,R_{22},\,R_{23}\,],\qquad r_3=r_1\times r_2
 ```
 
-- **상태:** $`[\,p_{tcp}(q),\ \text{rot6d},\ g,\ q\,]`$ — FR3 17차원, FR5 16차원, 받침 기준 절대값. 그리퍼 $`g = \operatorname{clip}\big((\bar q_g-g_{open})/(g_{closed}-g_{open})\big)`$ (0 벌림 ~ 1 닫힘).
+- **상태:** $`[\,p_{tcp}(q),\ \text{rot6d},\ g,\ q\,]`$ — FR3 17차원, FR5 16차원, 받침 기준 절대값. 그리퍼 $`g = \mathrm{clip}\big((\bar q_g-g_{open})/(g_{closed}-g_{open})\big)`$ (0 벌림 ~ 1 닫힘).
 - **동작:** 같은 배치를 그 스텝의 목표 관절값 $`q^*`$ 에서 계산. 쥠이 잡히면 그리퍼 동작은 1.
 - **GR00T 입력 (초안):** 상태 = 손끝 9 + 그리퍼, 동작 = 손끝 상대값(기준 = 지금 손끝 상태) + 그리퍼 절대값, 16 스텝 묶음(0.53 s). 관절을 빼서 FR3 · FR5를 한 모델로 학습할 수 있다.
 

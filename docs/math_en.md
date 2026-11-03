@@ -9,7 +9,7 @@ This document collects **the equations the code actually computes** in the digit
 - $`\{B\}`$: robot base frame (= Isaac Lab environment frame). $`+x`$ forward, $`+y`$ left, $`+z`$ up. The base is at $`(-0.66,\,0,\,0.912)`$ m in world coordinates, and the table top is at $`z_w = 0.900`$ m.
 - TCP frame for top-down grasping: $`z_{tcp} = -\hat z`$, $`x_{tcp}`$ = wrist direction (yaw), and the fingers open along $`y_{tcp}`$.
 - One control step $`\Delta t = 4 \times \tfrac{1}{120} \approx 0.0333`$ s → 30 Hz (recorded once every 4 physics steps).
-- $`[\,v\,]_\times`$: the cross-product matrix of vector $`v`$. $`\operatorname{Exp}`$ · $`\operatorname{Log}`$: the exponential · logarithm maps between rotation matrices and rotation vectors.
+- $`[\,v\,]_\times`$: the cross-product matrix of vector $`v`$. $`\mathrm{Exp}`$ · $`\mathrm{Log}`$: the exponential · logarithm maps between rotation matrices and rotation vectors.
 
 ### 4-2. Pinhole projection
 
@@ -57,7 +57,7 @@ The hand position $`p_h`$ is first solved from image points (with the hand orien
 **FR3:** joints 3 and 5 are set to 0 and only 5 joints are solved.
 
 ```math
-\min_{q}\;\big\lVert\, 10\,(p(q) - p_h) \,\big\rVert^2 + \big\lVert \operatorname{vec}\!\big(R(q) - R_{down}\big) \big\rVert^2
+\min_{q}\;\big\lVert\, 10\,(p(q) - p_h) \,\big\rVert^2 + \big\lVert \mathrm{vec}\!\big(R(q) - R_{down}\big) \big\rVert^2
 ```
 
 → $`q = [2.8,\,-16.0,\,0,\,-150.9,\,0,\,134.9,\,47.8]^\circ`$.
@@ -130,7 +130,7 @@ A sampled layout is used only if it satisfies all of the following **in order** 
 2. **Reach annulus:** from both robot bases, both end holes of the source rack and all 4 holes of the empty rack satisfy
 
 ```math
-0.38 \le \sqrt{x^2+y^2} \le 0.76\ \text{m}, \qquad |\operatorname{atan2}(y,x)| \le 70^\circ
+0.38 \le \sqrt{x^2+y^2} \le 0.76\ \text{m}, \qquad |\mathrm{atan2}(y,x)| \le 70^\circ
 ```
 
    (the IK check is done for both robots at the planning stage — Section 6-8)
@@ -144,7 +144,7 @@ A sampled layout is used only if it satisfies all of the following **in order** 
 The robot links in the start pose are approximated as capsules $`(a_j, b_j, \rho_j)`$ (segment + radius). A check point is occluded if the minimum distance (Ericson's segment–segment distance) between the line-of-sight segment $`\overline{cX}`$ from camera $`c`$ to check point $`X`$ and any capsule segment is smaller than that capsule's radius.
 
 ```math
-\text{occluded} \iff \exists j:\ \operatorname{dist}\big(\overline{cX},\ \overline{a_j b_j}\big) < \rho_j
+\text{occluded} \iff \exists j:\ \mathrm{dist}\big(\overline{cX},\ \overline{a_j b_j}\big) < \rho_j
 ```
 
 FR5 link radii [0.075, 0.065, 0.06, 0.05, 0.05, 0.05] m, flange→TCP 0.06 m, finger bar radius 0.035 m. Franka: 8 links at 0.07 m.
@@ -170,7 +170,7 @@ For the color, chromaticity coordinates are obtained from the Kang et al. (2002)
 - **Left-right combination · ring hole:** in paired collection, these are determined by the scene number $`n`$. Each block of 4 scenes contains a shuffle of the 4 cases, each appearing once.
 
 ```math
-\text{choice}(n) = \operatorname{perm}_4\big(\text{rng}[\,s,\ \lfloor (n-1)/4 \rfloor,\ \text{salt}\,]\big)\big[(n-1) \bmod 4\big]
+\text{choice}(n) = \mathrm{perm}_4\big(\text{rng}[\,s,\ \lfloor (n-1)/4 \rfloor,\ \text{salt}\,]\big)\big[(n-1) \bmod 4\big]
 ```
 
   (combination salt 7, ring-hole salt 11). In every 4 scenes, each case appears exactly once.
@@ -242,20 +242,20 @@ B(u)=(1-u)^2P_1+2u(1-u)\,b+u^2P_2,\qquad u\in[0,1]
 Because the vertex itself is the control point, the curve is tangent to both edges. The rounded path is turned into a dense polyline $`S_k`$, and progress is mapped to arc length using the cumulative length $`d_k`$.
 
 ```math
-p(s)=\operatorname{lerp}\big(sL;\ d_k,\ S_k\big),\qquad L=d_{end},\ s\in[0,1]
+p(s)=\mathrm{lerp}\big(sL;\ d_k,\ S_k\big),\qquad L=d_{end},\ s\in[0,1]
 ```
 
-**Application.** Approach via point $`via = \tfrac12(p_0+p_{pre}) + (v_x, v_y, h_{arc})`$, $`v_{x,y} \sim U(\pm 0.03)`$, $`h_{arc} \sim U(0,\ 0.04)`$ m. Rounding distances 0.06 · 0.03 m (approach), 0.04 · 0.06 · 0.04 m (carry). IK is solved at $`M = \operatorname{clip}(\lceil L/0.004\rceil + \lceil\theta_{deg}/2\rceil,\ 24,\ 4000)`$ points, with linear interpolation in joint space in between.
+**Application.** Approach via point $`via = \tfrac12(p_0+p_{pre}) + (v_x, v_y, h_{arc})`$, $`v_{x,y} \sim U(\pm 0.03)`$, $`h_{arc} \sim U(0,\ 0.04)`$ m. Rounding distances 0.06 · 0.03 m (approach), 0.04 · 0.06 · 0.04 m (carry). IK is solved at $`M = \mathrm{clip}(\lceil L/0.004\rceil + \lceil\theta_{deg}/2\rceil,\ 24,\ 4000)`$ points, with linear interpolation in joint space in between.
 
 ### 6-4. Orientation interpolation — SO(3) exp · log
 
 Two orientations $`R_0 \to R_1`$ are connected along the geodesic.
 
 ```math
-\omega=\operatorname{Log}\!\big(R_1R_0^\top\big),\qquad R(s)=\operatorname{Exp}\!\big(u(s)\,\omega\big)\,R_0
+\omega=\mathrm{Log}\!\big(R_1R_0^\top\big),\qquad R(s)=\mathrm{Exp}\!\big(u(s)\,\omega\big)\,R_0
 ```
 
-$`\operatorname{Exp}`$ is the Rodrigues formula $`I+\sin\theta\,[\hat k]_\times+(1-\cos\theta)[\hat k]_\times^2`$, and $`\operatorname{Log}`$ is $`\theta=\arccos\big((\operatorname{tr}R-1)/2\big)`$, $`\omega=\frac{\theta}{2\sin\theta}(R_{32}-R_{23},\ R_{13}-R_{31},\ R_{21}-R_{12})`$ (near $`\theta \approx \pi`$, computed separately from a column of $`(R+I)/2`$). When both orientations point down, $`R_1R_0^\top = R_z(\Delta\psi)`$, so the rotation is **only about the vertical axis**.
+$`\mathrm{Exp}`$ is the Rodrigues formula $`I+\sin\theta\,[\hat k]_\times+(1-\cos\theta)[\hat k]_\times^2`$, and $`\mathrm{Log}`$ is $`\theta=\arccos\big((\mathrm{tr}R-1)/2\big)`$, $`\omega=\frac{\theta}{2\sin\theta}(R_{32}-R_{23},\ R_{13}-R_{31},\ R_{21}-R_{12})`$ (near $`\theta \approx \pi`$, computed separately from a column of $`(R+I)/2`$). When both orientations point down, $`R_1R_0^\top = R_z(\Delta\psi)`$, so the rotation is **only about the vertical axis**.
 
 There are two progress functions $`u(s)`$.
 
@@ -322,7 +322,7 @@ If $`a_z < \cos 12^\circ`$, it descends vertically. If the tube is tilted by $`\
 **FR3 (7-DoF, numerical):** damped least squares + null-space motion toward the start pose.
 
 ```math
-e=\begin{bmatrix}p^*-p\\ \operatorname{Log}(R^*R^\top)\end{bmatrix},\qquad
+e=\begin{bmatrix}p^*-p\\ \mathrm{Log}(R^*R^\top)\end{bmatrix},\qquad
 J_{:,i}=\begin{bmatrix}z_i\times(p-o_i)\\ z_i\end{bmatrix}
 ```
 
@@ -335,7 +335,7 @@ Starting from the previous point's solution, up to 40 iterations; it fails if mo
 **FR5 (6-DoF, analytical):** UR-style solution with up to 8 solutions.
 
 ```math
-\theta_1=\operatorname{atan2}(p_{05,y},\,p_{05,x})\pm\arccos\!\big(d_4/r\big)+\tfrac{\pi}{2},\qquad
+\theta_1=\mathrm{atan2}(p_{05,y},\,p_{05,x})\pm\arccos\!\big(d_4/r\big)+\tfrac{\pi}{2},\qquad
 \theta_5=\pm\arccos\!\Big(\frac{p_x\sin\theta_1-p_y\cos\theta_1-d_4}{d_6}\Big)
 ```
 
@@ -379,7 +379,7 @@ At the first step where the grasp latch is set, the tube within 25 mm of the TCP
 ```math
 T_{tube}=T_{tcp}\,{}^{tcp}T_{tube},\qquad
 v=\frac{p_t-p_{t-1}}{\Delta t},\qquad
-\omega=\frac{\operatorname{Log}\!\big(R_tR_{t-1}^\top\big)}{\Delta t}
+\omega=\frac{\mathrm{Log}\!\big(R_tR_{t-1}^\top\big)}{\Delta t}
 ```
 
 ```math
@@ -399,7 +399,7 @@ Orientation is written as the **first two rows** of the rotation matrix.
 \text{rot6d}=[\,R_{11},\,R_{12},\,R_{13},\,R_{21},\,R_{22},\,R_{23}\,],\qquad r_3=r_1\times r_2
 ```
 
-- **State:** $`[\,p_{tcp}(q),\ \text{rot6d},\ g,\ q\,]`$ — FR3 17-D, FR5 16-D, absolute values in the base frame. Gripper $`g = \operatorname{clip}\big((\bar q_g-g_{open})/(g_{closed}-g_{open})\big)`$ (0 open – 1 closed).
+- **State:** $`[\,p_{tcp}(q),\ \text{rot6d},\ g,\ q\,]`$ — FR3 17-D, FR5 16-D, absolute values in the base frame. Gripper $`g = \mathrm{clip}\big((\bar q_g-g_{open})/(g_{closed}-g_{open})\big)`$ (0 open – 1 closed).
 - **Action:** the same layout, computed from that step's target joint values $`q^*`$. Once the grasp latch is set, the gripper action is 1.
 - **GR00T input (draft):** state = TCP 9 + gripper, action = relative TCP (reference = current TCP state) + absolute gripper, chunks of 16 steps (0.53 s). Dropping the joints allows FR3 and FR5 to be trained with a single model.
 
