@@ -2,18 +2,33 @@
 
 ### Can a 30 mm tube go into a 31 mm hole? — Sim-to-Real VLA for precision insertion of bio-lab tubes (Franka FR3 · FAIRINO FR5, Isaac Sim / Isaac Lab)
 
-[한국어](README.md) · Lab repo: [BioRoboticsIsaacSim](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim) · Equations: [docs/math_en.md](docs/math_en.md)
+[한국어](README.md) · [Contents](#contents) · Equation notes: [docs/math_en.md](docs/math_en.md) · Official write-up: [BioRoboticsIsaacSim / sim_isaac](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac)
 
 ![Scripted demonstrations of the same scene performed by FR3 (left) and FR5 (right) — third-person camera, 4× speed](figures/demo_pair_third_4x.gif)
 
 Paired demonstrations of the same scene (1103-27), each performed by one robot with its own workcell cameras. 1× video (third-person · wrist): [demo_pair_scene27.mp4](figures/demo_pair_scene27.mp4)
 
 > **Latest news**
+> - 2026-11-03 · Added [Real setup → digital twin](docs/real_to_twin/README_EN.md) · FR3 finished collecting 100 demonstrations
 > - 2026-11-02 · Started automatic collection of 100 FR3 · FR5 paired demonstrations
 > - 2026-11-02 · GR00T N1.7 installed
 > - 2026-11-02 · Added review video · motion-jump check tools
 
 ---
+
+## Contents
+
+1. **Overview · task · pipeline** — [1](#1-overview) · [2](#2-task) · [3](#3-overall-pipeline-updated)
+2. **[Real setup → digital twin](docs/real_to_twin/README_EN.md)** — from measurements to shapes, image regions (segments), camera fitting, comparison with colour segments · summary in [4](#4-digital-twin-isaac-sim) · [per-robot differences](#per-robot-differences)
+3. **Domain randomization (Isaac Lab)** — [5](#5-domain-randomization-isaac-lab)
+4. **Scripted demo collector (BioTube-AutoDemo-IsaacLab)** — [6](#6-biotube-autodemo-isaaclab--scripted-demo-collector) · detailed development notes (Korean) [docs/12-자동수집기.md](docs/12-자동수집기.md)
+5. **Equations** — summary [7](#7-equations-summary) · full notes [docs/math_en.md](docs/math_en.md) ([digital twin](docs/math_en.md#4-equations-and-application--digital-twin) · [domain randomization](docs/math_en.md#5-equations-and-application--domain-randomization) · [scripted demos](docs/math_en.md#6-equations-and-application--scripted-demo-generation-and-success-check))
+6. **Data quality tools · dataset** — [8](#8-data-quality-tools) · [9](#9-dataset-status-updated)
+7. **GR00T · results · roadmap** — [10](#10-vla--gr00t-n17) · [11](#11-results-updated) · [12](#12-roadmap)
+8. **How to run · folders** — [13](#13-how-to-run) · [14](#14-folder-structure-and-environment)
+9. **🍪 How we got here** — [at the bottom](#the-task-changed-three-times)
+
+Official write-up (lab repository): [BioRoboticsIsaacSim / sim_isaac](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac)
 
 ## 1. Overview
 
