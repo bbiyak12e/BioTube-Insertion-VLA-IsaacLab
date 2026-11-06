@@ -9,6 +9,8 @@
 Paired demonstrations of the same scene (1103-27), each performed by one robot with its own workcell cameras. 1× video (third-person · wrist): [demo_pair_scene27.mp4](figures/demo_pair_scene27.mp4)
 
 > **Latest news**
+> - 2026-11-06 · [Report 2 — GR00T trained on 100 demos: benchmark results, data-collection mistakes, and how we will fix them](docs/report02_vla100_bench/README_EN.md) · development log [docs/12](docs/12-자동수집기.md) updated (Korean)
+> - 2026-11-04 · Fine-tuned GR00T N1.7 (100 demos each for FR3 · FR5) · benchmark on 50 unseen scenes
 > - 2026-11-03 · Added [Real setup → digital twin](docs/real_to_twin/README_EN.md) · FR3 finished collecting 100 demonstrations
 > - 2026-11-02 · Started automatic collection of 100 FR3 · FR5 paired demonstrations
 > - 2026-11-02 · GR00T N1.7 installed
@@ -24,7 +26,7 @@ Paired demonstrations of the same scene (1103-27), each performed by one robot w
 4. **Scripted demo collector (BioTube-AutoDemo-IsaacLab)** — [6](#6-biotube-autodemo-isaaclab--scripted-demo-collector) · detailed development notes (Korean) [docs/12-자동수집기.md](docs/12-자동수집기.md)
 5. **Equations** — summary [7](#7-equations-summary) · full notes [docs/math_en.md](docs/math_en.md) ([digital twin](docs/math_en.md#4-equations-and-application--digital-twin) · [domain randomization](docs/math_en.md#5-equations-and-application--domain-randomization) · [scripted demos](docs/math_en.md#6-equations-and-application--scripted-demo-generation-and-success-check))
 6. **Data quality tools · dataset** — [8](#8-data-quality-tools) · [9](#9-dataset-status-updated)
-7. **GR00T · results · roadmap** — [10](#10-vla--gr00t-n17) · [11](#11-results-updated) · [12](#12-roadmap)
+7. **GR00T · results · roadmap** — [10](#10-vla--gr00t-n17) · [11](#11-results-updated) · [12](#12-roadmap) · **[Report 2 — benchmark results · mistakes and fixes](docs/report02_vla100_bench/README_EN.md)**
 8. **How to run · folders** — [13](#13-how-to-run) · [14](#14-folder-structure-and-environment)
 9. **🍪 How we got here** — [at the bottom](#the-task-changed-three-times)
 
@@ -175,23 +177,33 @@ p(z_c)=b+\frac{z_c-b_z}{a_z}\,a,\qquad d=\big\lVert\,[p(z_c)-h]_{xy}\big\rVert\l
 
 ## 9. Dataset status (updated)
 
-Target: 100 FR3 · FR5 pairs — collection in progress. The table below will be filled in when it finishes.
+First 100 pairs (Nov 2 – 3, base seed 1103, layout A):
 
-| | Saved | Discarded · given up | Success rate | Demo length (sim) | Wall-clock time per demo |
+| | Saved | Discarded · given up | Success rate (per attempt) | Demo length (sim) | Wall-clock time per demo |
 |---|---|---|---|---|---|
-| FR3 | | | | | |
-| FR5 | | | | | |
-| Pair (both saved) | | — | — | — | — |
+| FR3 | 100 | 16 discarded · 2 given up | 86 % | about 41 s | about 6 min |
+| FR5 | 100 | 1 discarded · 0 given up | 99 % (in-hand hold assist) | about 41 s | about 6 min |
+| Pair (both saved) | 99 | — | — | — | — |
+
+Since then we collected 200 more A pairs · 300 B pairs (tubes in any rack holes; FR5 still following B). The settings that differ from the real robots (30 Hz · 640×360 · state · action definitions · exposure)
+and the dome light that changed with each collector run are covered in Sections 4 · 5 of [Report 2](docs/report02_vla100_bench/README_EN.md) — fixed with a converter (`tools/common_to_real.py`) and re-collection.
 
 ## 10. VLA — GR00T N1.7
 
-- **Now:** installed (`tools/common_groot_install.sh`), draft modality config (`tools/common_groot_modality.py`)
-- **Input · output (draft):** 2 cameras + TCP state + gripper → relative TCP motion + gripper, in chunks of 16 steps. Joints are left out so that FR3 (7-DoF) · FR5 (6-DoF) can be trained with one model
-- **Next:** data loading test (`tools/common_groot_smoke.sh`) → sim zero-shot → fine-tuning → compare FR3 only · FR5 only · both
+- **Now:** the base model `nvidia/GR00T-N1.7-3B` (`NEW_EMBODIMENT`) fine-tuned per robot on 100 demos (`tools/common_groot_train.sh` — training server, 20000 steps · batch 16 · LR 1e-4, same settings as the real FR5 training)
+- **Input · output:** 2 cameras + TCP state + gripper → relative TCP motion + gripper, in chunks of 16 steps (current data 30 Hz → 0.53 s, real format 10 Hz → 1.6 s)
+- **Benchmark:** reuses the collector's scenes · judgment with the policy as the input (`lab/common_bench.py` · policy server `tools/common_groot_server.py`), analysis `tools/common_bench_target.py` · viewer `tools/common_bench_view.py`
+- **Next:** retrain in the real format (10 Hz) · with 300 demos (FR5 training now) → data with the real settings (ab) → compare FR3 only · FR5 only · both
 
 ## 11. Results (updated)
 
-In preparation
+| | Training demos | Success on 50 unseen scenes | 95 % CI |
+|---|---|---|---|
+| FR3 | 100 | 2 / 50 (4 %) | 1.1–13.5 % |
+| FR5 | 100 | 1 / 50 (2 %) | 0.4–10.5 % |
+
+Real-robot models trained on 100 demos are similar (FR3 5 % · FR5 0 %; the real 200-demo model reaches 30 %). We suspect layout memorization instead of color, grasp precision, and a short action chunk;
+the FR3 benchmark ran under a lighting state different from its training data and will be re-measured. Details in [Report 2](docs/report02_vla100_bench/README_EN.md).
 
 ## 12. Roadmap
 
@@ -199,9 +211,12 @@ In preparation
 - [x] Isaac Lab domain randomization
 - [x] Scripted demo collector · paired demonstrations
 - [x] Review page · data check tools
-- [ ] 100 FR3 · FR5 paired demonstrations
-- [ ] GR00T N1.7 data loading test · sim zero-shot
-- [ ] Fine-tuning · per-robot comparison
+- [x] 100 FR3 · FR5 paired demonstrations
+- [x] GR00T N1.7 data loading test · fine-tuning (100 demos) · sim benchmark — [Report 2](docs/report02_vla100_bench/README_EN.md)
+- [ ] Sim zero-shot (50 scenes — only a 2-scene trial so far)
+- [ ] Matching the real format (10 Hz · 848×480 · state · action definitions · exposure) · fixing the dome light — in progress
+- [ ] Retraining with format · number of demos · layout changed — two FR5 runs training
+- [ ] Re-collection with the real settings (ab) · per-robot comparison
 - [ ] Real-world deployment (Sim-to-Real)
 
 ## 13. How to run
@@ -252,6 +267,8 @@ Ubuntu · NVIDIA RTX 5090 · Isaac Sim 6.0.1 · Isaac Lab v3.0.0-beta2.patch1 ·
 - **The sim ran at 0.07× real time** — generating the review videos was using up all the CPU. → Lowest priority · 2 cores, and the bottleneck was found by measuring the per-step time split into physics · camera · rest
 - **"Go to tube" took too long** — the wrist rotation continued throughout the whole motion. → Changed the rotation to time-proportional minimum-jerk, mean 11.2 → 8.2 s (joint limits unchanged)
 - **The arm seemed to jump in the videos** — it was not the arm but the video compression's keyframes (the whole image changed abruptly every 8.3 s). → Fixed the review-video compression and built a tool that checks for jumps directly from the data values
+- **We recorded at a different rate from the real robots** — sim at 30 Hz, real at 10 Hz. The training configuration was compared with the real one item by item, but the data itself was not, so the same "16-step action chunk" became 1.6 s on the real robots and 0.53 s in sim. → A converter to the real format per robot, and a data checklist before training
+- **The dome light changed every time Isaac started** — the tube · holder USDs carried Blender's "world" dome (`env_light`), and at each start the renderer picked either our dome or this one → first-image brightness split into about 134 / 185 per run, and the FR3 benchmark ran under lighting different from its training. We had removed it from the warnings because its intensity was 1. → Turned that light off in the object USDs, and now check lighting by the per-run brightness rather than by the settings
 
 Detailed log: [docs/12-자동수집기.md](docs/12-자동수집기.md)
 </details>
