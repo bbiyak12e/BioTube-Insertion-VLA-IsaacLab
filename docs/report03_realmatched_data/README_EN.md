@@ -6,9 +6,9 @@
 
 ## Summary
 
-- **Probability of the math model (auto-demonstrator):** over five collection sets and 2,593 attempts, the per-attempt success was 78–94 % for FR3 and 99–100 % for FR5.
-  - 155 of FR3's 170 failures (91 %) were the tube slipping more than 15 mm in the hand during carry.
-  - Replaying FR3's 109 failed attempts with FR5, using the same scene and random draws, succeeded 109 times out of 109. Note that FR5 has a simulation-only grasp-hold aid.
+- **Probability of the math model (auto-demonstrator):** both robots were compared by their first attempt on the same 1,242 scenes (five collection sets). Success was 88.6 % for FR3 (77.5–94.8 % per set) and 98.9 % for FR5 (97.1–100 %).
+  - 128 of FR3's 141 first-attempt failures (91 %) were the tube slipping more than 15 mm in the hand during carry.
+  - When all 170 attempts that FR3 discarded were replayed by FR5 with the same scene and random draws, 169 were saved and 1 could not be planned. Note that FR5 has a simulation-only grasp-hold aid.
 - **Precision:** the axis offset at the rim of saved demonstrations had a median of 0.53 mm and a 95th percentile of 1.23–1.33 mm for both robots, well inside the 2 mm threshold.
 - **Differences between the robots:** with real-matched settings, the median FR5 demonstration lasts 20.7 s and FR3 33.5 s. FR3 is slowed by its joint-7 limit (0.15 rad/s) in scenes that need a large wrist turn.
 - **Re-collection with real settings (ab):** about 600 demonstrations per robot (596 pairs) at 848×480, with the real tube appearance and FR5's real trajectory rules. Running eight scenes per process yields 23.4 pairs per hour, 2.2× the first collection.
@@ -43,33 +43,42 @@ A layout is used only if both robots can reach it, both third-person cameras see
 
 ## 3. Math model — probability and precision
 
-### 3-1. Success rates
+### 3-1. Success rates (same scenes, equal counts)
 
-| Set | Layout · seed | FR3 first attempt | FR3 per attempt | FR5 first attempt | FR5 per attempt |
-|---|---|---|---|---|---|
-| AB 100 | A · 1103 | 88/102 = 86.3 % | 100/116 = 86.2 % | 100/101 = 99.0 % | 100/101 = 99.0 % |
-| AB A+200 | A · 1104 | 162/209 = 77.5 % | 200/256 = 78.1 % | 198/200 = 99.0 % | 200/202 = 99.0 % |
-| AB B | B · 1105 | 274/313 = 87.5 % | 300/349 = 86.0 % | 300/300 = 100 % | 300/300 = 100 % |
-| ab A | A · 1103 | 289/305 = 94.8 % | 303/321 = 94.4 % | 302/303 = 99.7 % | 303/304 = 99.7 % |
-| ab B | B · 1105 | 288/313 = 92.0 % | 306/337 = 90.8 % | 303/306 = 99.0 % | 304/307 = 99.0 % |
+The two robots are compared on the **same scenes**. In each set we take the n scenes on which FR3 made a first attempt, and score FR5 by its first attempt on the same scene with the same random draws. Attempts that FR5 had not run during paired collection were replayed on FR5 on 11-07 and 11-10, so none is missing.
 
-- **First attempt** = scenes saved on the first attempt ÷ scenes tried. This is the number to compare with a VLA, which must also succeed in one try.
-- **Per attempt** = saved ÷ (saved + discarded). It measures collection efficiency.
+| Set | Layout · seed | n | FR3 first attempt | FR5 first attempt | FR5 fail · no plan | Excluded at planning FR3 · FR5 | FR3 discard → FR5 saved |
+|---|---|---|---|---|---|---|---|
+| AB 100 | A · 1103 | 102 | 88 = 86.3 % (78.3–91.6) | 101 = 99.0 % (94.7–99.8) | 0 · 1 | 4 · 1 | 15/16 (1 no plan) |
+| AB A+200 | A · 1104 | 209 | 162 = 77.5 % (71.4–82.6) | 207 = 99.0 % (96.6–99.7) | 2 · 0 | 10 · 0 | 56/56 |
+| AB B | B · 1105 | 313 | 274 = 87.5 % (83.4–90.7) | 313 = 100 % (98.8–100) | 0 · 0 | 10 · 0 | 49/49 |
+| ab A | A · 1103 | 305 | 289 = 94.8 % (91.6–96.7) | 303 = 99.3 % (97.6–99.8) | 1 · 1 | 9 · 1 | 18/18 |
+| ab B | B · 1105 | 313 | 288 = 92.0 % (88.5–94.5) | 304 = 97.1 % (94.6–98.5) | 2 · 7 | 10 · 39 | 31/31 |
+| **AB total** | | 624 | 524 = 84.0 % (80.9–86.6) | 621 = 99.5 % (98.6–99.8) | 2 · 1 | 24 · 1 | 120/121 |
+| **ab total** | | 618 | 577 = 93.4 % (91.1–95.1) | 607 = 98.2 % (96.8–99.0) | 3 · 8 | 19 · 40 | 49/49 |
+| **All** | | 1,242 | 1,101 = 88.6 % (86.8–90.3) | 1,228 = 98.9 % (98.1–99.3) | 5 · 9 | 43 · 41 | 169/170 |
+
+- **First attempt** = saved on the first attempt ÷ n. This is the number to compare with a VLA, which must also succeed in one try. A scene that FR5 cannot plan counts as a failure.
+- **Excluded at planning:** scenes dropped at planning are left out of n for both robots; the table lists which robot could not plan them.
+- **Last column:** every attempt FR3 discarded (including non-first attempts), replayed on FR5 with the same scene and random draws.
+- Per-attempt success including retries is not compared, because the two robots made different numbers of attempts (FR3 1,379; FR5 1,214).
 - AB denotes the first settings and ab the real-matched settings (Section 5).
 
 ![Probability and precision of the math model](figures/fig_mathmodel_en.png)
 
-- **(a) Per-attempt success with 95 % intervals:** the intervals are Wilson intervals.
+- **(a) First-attempt success on the same scenes with 95 % intervals (n in parentheses):** the intervals are Wilson intervals.
 
   ```math
   \frac{\hat p + \frac{z^2}{2n} \pm z\sqrt{\frac{\hat p(1-\hat p)}{n} + \frac{z^2}{4n^2}}}{1 + \frac{z^2}{n}}, \qquad z = 1.96
   ```
 
-- **(b) Reasons for discards:**
-  - FR3 discarded 170 of 1,379 attempts, 155 of them for in-hand slip. When the simulated FR3 fingers grip the 33 mm cap they close to 25.4 mm, which suggests they penetrate the cap (real: 31–34 mm).
-  - FR5 discarded only 7 of 1,214. Its grasp-hold aid rules out in-hand slip by construction.
-- **FR3 failures replayed by FR5:** all 109 attempts that FR3 had failed (88 scenes) were saved when replayed by FR5 with the same scene and random draws. Part of this gap comes from the aid.
-- **Not yet explained:** we have not identified why FR3's success rose in the ab sets (AB 78–86 % → ab 91–94 %).
+- **(b) First-attempt failure reasons on the same 1,242 scenes:**
+  - FR3, 141: in-hand slip 128, not in the hole 9, shallow 4. When the simulated FR3 fingers grip the 33 mm cap they close to 25.4 mm, which suggests they penetrate the cap (real: 31–34 mm).
+  - FR5, 5: shallow 3, not in the hole 1, other 1, all on scenes where FR3 succeeded. FR5 could not plan 9 scenes (7 in ab B). Its grasp-hold aid rules out in-hand slip by construction.
+- **FR3 discards replayed on FR5:** of the 170 attempts FR3 discarded, FR5 saved 169 and could not plan 1. Part of this gap comes from the aid.
+- **Reproducibility:** for the 96 replayed attempts that FR5 had already run during paired collection, every outcome was identical; a scene rebuilt from its seed reproduces its result.
+- **Missing scenes:** in ab B, 39 scenes were dropped because FR5 could not plan them (10 because of FR3), so layouts that are hard for FR5 are missing from the comparison.
+- **Not yet explained:** we have not identified why FR3's first-attempt success rose in the ab sets (AB 77.5–87.5 % → ab 92.0–94.8 %).
 
 ### 3-2. Precision (saved demonstrations)
 
@@ -146,7 +155,7 @@ Values are ranges over the five sets. The thresholds are $`d_{ax}`$ ≤ 2 mm and
 | ab A | A · 1103 | 848×480 | real colour (opaque) | `real_1105` | 303 | 303 |
 | ab B | B · 1105 | 848×480 | real colour (opaque) | `real_1105` | 306 | 304 |
 
-In ab, 596 pairs were saved by both robots (A 299, B 297). In addition, 109 FR5 replays of FR3-failed attempts are kept separately and not used for training.
+In ab, 596 pairs were saved by both robots (A 299, B 297). In addition, 158 FR5 replays of FR3-failed attempts are kept separately (all saved; not used for training).
 
 ## 7. Comparison with real data
 
@@ -201,7 +210,7 @@ The real teams compared the 600 converted ab episodes with their real data: FR3 
 **Next steps**
 
 1. Finish the 600-trial benchmark (four models × layouts C, A, B × 50) → Report 4.
-2. Compare the real teams' co-training results (real 200 + sim 600) with the trends of the simulation benchmark.
+2. Compare models fine-tuned on 200 real demonstrations starting from the sim-600 models (FR5, FR3) with models trained on the 200 real demonstrations alone under the same settings.
 3. Feed real values into the next collection: per-robot base-to-desk height, FR3 home joints, real rack-placement and wrist-yaw distributions, FR3 sag emulation, and tube/rack shapes.
 4. Test colour generalization: a benchmark that swaps only the red and yellow positions, and a yellow-ring task that moves the yellow tube.
 5. Test recovery demonstrations (re-grasp after a miss) and noise injection.

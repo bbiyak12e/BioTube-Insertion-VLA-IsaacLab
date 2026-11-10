@@ -17,6 +17,7 @@ from matplotlib.lines import Line2D
 EX, SP = sys.argv[1], sys.argv[2]
 ONLY = set(sys.argv[3:])
 ST = json.load(open(SP))
+EQ = json.load(open(os.path.join(os.path.dirname(os.path.abspath(SP)), "matched_equal_n.json")))   # equal_n.py — 같은 장면 · 같은 판 수
 T = S.T
 DS = ["AB100", "AB_A200", "AB_B", "ab_A", "ab_B"]
 DSL = {"AB100": "AB 100", "AB_A200": "AB A+200", "AB_B": "AB B", "ab_A": "ab A", "ab_B": "ab B"}
@@ -38,30 +39,33 @@ def fig_mathmodel():
     ax = axs[0]
     for j, rb in enumerate(("fr3", "fr5")):
         for i, d in enumerate(DS):
-            x = ST["auto"][d][rb]
-            p, (lo, hi) = x["per_attempt"], x["per_attempt_ci"]
+            x = EQ["sets"][d]
+            p = 100.0 * x[rb] / x["n"]
+            lo, hi = x[rb + "_ci"]
             xx = i + (-0.13 if rb == "fr3" else 0.13)
-            ax.errorbar(xx, 100 * p, yerr=[[max(0, 100 * (p - lo))], [max(0, 100 * (hi - p))]], fmt="o", ms=3.2, color=S.ROBOT_C[rb], elinewidth=0.8, capsize=1.6, mew=0)
+            ax.errorbar(xx, p, yerr=[[max(0, p - lo)], [max(0, hi - p)]], fmt="o", ms=3.2, color=S.ROBOT_C[rb], elinewidth=0.8, capsize=1.6, mew=0)
     ax.axvspan(2.5, 4.5, color="#F0F0F0", zorder=0, lw=0)
-    ax.text(3.5, 71.5, T("실물 설정", "real-matched"), ha="center", fontsize=6.0, color=S.G2)
+    ax.text(3.5, 69.6, T("실물 설정", "real-matched"), ha="center", fontsize=6.0, color=S.G2)
     ax.set_xticks(range(len(DS)))
-    ax.set_xticklabels([DSL[d] for d in DS], rotation=35, ha="right")
-    ax.set_ylim(70, 101)
-    ax.set_ylabel(T("시도당 성공 (%)", "success per attempt (%)"))
+    ax.set_xticklabels(["%s (%d)" % (DSL[d], EQ["sets"][d]["n"]) for d in DS], rotation=35, ha="right")
+    ax.set_ylim(68, 101)
+    ax.set_ylabel(T("같은 장면 첫 시도 성공 (%)", "first-attempt success, same scenes (%)"))
     S.panel(ax, "a")
-    # (b) 버림 까닭 (모든 묶음 합)
+    # (b) 같은 장면 첫 시도의 실패 까닭 (다섯 묶음 합, 두 로봇 같은 장면 수)
     ax = axs[1]
     kinds = [("slip", T("손에서 벗어남", "slipped in hand"), S.CE), ("not_in_hole", T("구멍에 없음", "not in hole"), S.G1),
-             ("shallow", T("덜 꽂힘", "shallow"), S.G2), ("other", T("기타", "other"), S.G3)]
+             ("shallow", T("덜 꽂힘", "shallow"), S.G2), ("other", T("기타", "other"), S.G3), ("noplan", T("계획 못 함", "cannot plan"), "#D9D9D9")]
+    G = EQ["groups"]["all"]
     tot = {}
     for rb in ("fr3", "fr5"):
         c = {}
-        for d in DS:
-            for k, v in ST["auto"][d][rb]["discard"].items():
-                kk = k if k in ("slip", "not_in_hole", "shallow") else "other"
-                c[kk] = c.get(kk, 0) + v
+        for k, v in G[rb + "_first_why"].items():
+            kk = k if k in ("slip", "not_in_hole", "shallow") else "other"
+            c[kk] = c.get(kk, 0) + v
+        if rb == "fr5":
+            c["noplan"] = G["fr5_noplan"]
         tot[rb] = c
-    att = {rb: sum(ST["auto"][d][rb]["attempts"] for d in DS) for rb in ("fr3", "fr5")}
+    att = {rb: G["n"] for rb in ("fr3", "fr5")}
     for i, rb in enumerate(("fr3", "fr5")):
         left = 0
         for k, lab, col in kinds:
@@ -69,15 +73,15 @@ def fig_mathmodel():
             if v:
                 ax.barh(i, v, left=left, color=col, height=0.42, edgecolor="white", lw=0.6)
             left += v
-        ax.text(left + 5, i, "%d / %d" % (left, att[rb]), va="center", fontsize=6.0)
+        ax.text(left + 4, i, "%d / %s" % (left, "{:,}".format(att[rb])), va="center", fontsize=6.0)
     ax.set_yticks([0, 1])
     ax.set_yticklabels(["FR3", "FR5"])
     for t, rb in zip(ax.get_yticklabels(), ("fr3", "fr5")):
         t.set_color(S.ROBOT_C[rb])
-    ax.set_xlim(0, 260)
-    ax.set_ylim(1.6, -0.5)
-    ax.set_xlabel(T("버린 시도 (모든 묶음)", "discarded attempts (all sets)"))
-    ax.legend([Rectangle((0, 0), 1, 1, color=c) for _, _, c in kinds], [l for _, l, _ in kinds], loc="center right", bbox_to_anchor=(1.0, 0.47), fontsize=5.6, handlelength=0.9, handletextpad=0.3, borderaxespad=0.1)
+    ax.set_xlim(0, 215)
+    ax.set_ylim(3.2, -0.5)
+    ax.set_xlabel(T("첫 시도 실패 (같은 장면)", "first-attempt failures"))
+    ax.legend([Rectangle((0, 0), 1, 1, color=c) for _, _, c in kinds], [l for _, l, _ in kinds], loc="lower right", bbox_to_anchor=(1.02, 0.0), fontsize=5.6, handlelength=0.9, handletextpad=0.3, borderaxespad=0.1)
     S.panel(ax, "b")
     # (c) d_ax ECDF, (d) 기울기 ECDF (저장된 시연, 모든 묶음)
     for ax, key, xl, thr, lim, pn in ((axs[2], "dax_raw", T("턱 높이에서 축 거리 (mm)", "axis offset at rim $d_{ax}$ (mm)"), 2.0, (0, 2.3), "c"),
@@ -313,14 +317,14 @@ def fig_bench_res():
     xl = [T("쥠", "grasp"), T("들어\n올림", "lift"), T("슬롯\n위", "over\nslot"), T("성공", "success")]
     for k, rb, lab, lay in rows:
         x = B[k]
-        v = [100.0 * x["stages"][s] / x["n"] for s in stg]
+        v = [100.0 * x["stages"][s] / max(1, x["n_rows"]) for s in stg]      # 튀지 않은 첫 판 가운데
         ls = "-" if lay == "C" else (0, (3, 1.5))
         mk = "o" if "n200" not in k else "s"
         ax.plot(range(4), v, color=S.ROBOT_C[rb], ls=ls, marker=mk, ms=2.8, lw=0.9, mew=0)
     ax.set_xticks(range(4))
     ax.set_xticklabels(xl, fontsize=6.0)
     ax.set_ylim(0, 105)
-    ax.set_ylabel(T("단계에 이른 시도 (%)", "trials reaching stage (%)"))
+    ax.set_ylabel(T("단계에 이른 첫 판 (%)", "first trials reaching stage (%)"))
     ax.legend([Line2D([], [], color=S.G1, ls=(0, (3, 1.5))), Line2D([], [], color=S.G1, ls="-"), Line2D([], [], color=S.G1, marker="o", ls="", ms=3), Line2D([], [], color=S.G1, marker="s", ls="", ms=3)],
               [T("배치 A", "layout A"), T("배치 C", "layout C"), "n100", "n200"], fontsize=5.6, loc="upper right", ncol=2, handlelength=1.6, columnspacing=0.6, borderaxespad=0.1)
     S.panel(ax, "b")
@@ -424,7 +428,7 @@ def fig_scene(root, with_real=True):
 
 
 if __name__ == "__main__":
-    ROOT = os.environ.get("BIO_ROOT", "Medical_bio_experiment")
+    ROOT = os.environ.get("BIO_ROOT", "/home/claude/Medical_bio_experiment")
     todo = {"fig_mathmodel": fig_mathmodel, "fig_traj": fig_traj, "fig_stages": fig_stages, "fig_train": fig_train,
             "fig_bench_res": fig_bench_res, "fig_real": fig_real, "fig_scene": lambda: fig_scene(ROOT), "fig_scene_sim": lambda: fig_scene(ROOT, with_real=False)}
     for lang in ("ko", "en"):
