@@ -1,0 +1,35 @@
+% style.tex — 구성도 공용 (standalone, xelatex). \kotrue / \kofalse 를 먼저 정함.
+\usepackage{mathptmx}
+\usepackage[no-math]{fontspec}
+\setmainfont{TeX Gyre Heros}
+\ifko
+  \newfontfamily\krfont{Noto Sans CJK KR}[Scale=0.9]
+  \usepackage[Latin,Korean]{ucharclasses}
+  \setTransitionsForKorean{\begingroup\krfont}{\endgroup}
+\fi
+\usepackage{xcolor}
+\definecolor{cFRiii}{HTML}{0072B2}
+\definecolor{cFRv}{HTML}{D55E00}
+\definecolor{cEmph}{HTML}{009E73}
+\usepackage{tikz}
+\usetikzlibrary{positioning,fit,backgrounds,arrows.meta,calc,shapes.geometric,shapes.misc,decorations.pathreplacing}
+\newcommand{\T}[2]{\ifko #1\else #2\fi}
+\tikzset{
+  >={Stealth[length=2.2mm,width=1.6mm]},
+  every node/.style={font=\fontsize{7.2}{8.6}\selectfont},
+  box/.style={draw=black, line width=0.5pt, rounded corners=1.2pt, fill=white, align=center, inner sep=2.6pt, minimum height=8.5mm, text width=#1},
+  box/.default=24mm,
+  gbox/.style={box=#1, fill=black!6},
+  gbox/.default=24mm,
+  ebox/.style={box=#1, draw=cEmph, line width=1.0pt, fill=cEmph!7},
+  ebox/.default=24mm,
+  grp/.style={draw=black!55, dashed, line width=0.45pt, rounded corners=2pt, inner sep=3.2mm},
+  grplabel/.style={anchor=north west, font=\fontsize{7.6}{9}\selectfont\bfseries, inner sep=1.2pt, fill=white},
+  ar/.style={->, line width=0.6pt},
+  ear/.style={->, line width=1.1pt, draw=cEmph},
+  dar/.style={->, line width=0.55pt, dashed},
+  small/.style={font=\fontsize{6.3}{7.4}\selectfont},
+  lab/.style={font=\fontsize{6.3}{7.4}\selectfont, fill=white, inner sep=1pt},
+}
+\newcommand{\D}{\fontsize{6.3}{7.5}\selectfont\color{black!78}}
+\newcommand{\code}[1]{\texttt{#1}}
