@@ -6,7 +6,7 @@ import sys
 
 import numpy as np
 
-ROOT = sys.argv[1] if len(sys.argv) > 1 else "Medical_bio_experiment"
+ROOT = sys.argv[1] if len(sys.argv) > 1 else "/home/claude/Medical_bio_experiment"
 sys.path.insert(0, os.path.join(ROOT, "lab"))
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import pstyle as S

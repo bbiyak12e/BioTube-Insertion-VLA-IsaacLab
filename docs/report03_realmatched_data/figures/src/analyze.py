@@ -22,7 +22,7 @@ AUTO = {   # 묶음 이름: (FR3 폴더, FR5 폴더)
     "ab_A": ("fr3/018_20261107_ab_a_1103", "fr5/016_20261107_ab_a_1103"),
     "ab_B": ("fr3/019_20261108_ab_b_1105", "fr5/017_20261108_ab_b_1105"),
 }
-FR3FAIL = ["fr5/008_20261103_fr3fail_1103", "fr5/013_20261107_fr3fail_1104", "fr5/014_20261107_fr3fail_1105"]
+FR3FAIL = ["fr5/008_20261103_fr3fail_1103", "fr5/013_20261107_fr3fail_1104", "fr5/014_20261107_fr3fail_1105", "fr5/021_20261110_fr3fail_ab_a", "fr5/022_20261110_fr3fail_ab_b"]
 BENCH = {
     "fr3_AB100_30hz_A": "fr3/010_20261104_bench_fr3_ck20000",
     "fr3_AB100_30hz_seen": "fr3/011_20261105_bench_fr3_ck20000_seen",
@@ -166,28 +166,77 @@ def auto_folder(rel):
     }
 
 
+def blew_up(npz):
+    """버린 벤치 시도의 data.npz (S = 손끝 9 · 그리퍼 · 팔 관절) — 관절이 튀었으면 True (tools/common_bench_recount.py 1.0 과 같은 규칙), 파일이 없으면 None."""
+    try:
+        S_ = np.asarray(np.load(npz)["S"], float)
+    except Exception:
+        return None
+    q_ = S_[:, 10:]
+    return bool((~np.isfinite(S_).all(1) | (np.abs(np.nan_to_num(q_, nan=1e9)) > 6.8).any(1)).any())
+
+
 def bench_folder(rel):
+    """벤치 한 폴더. 규칙 (11-10): 장면마다 첫 판만 · 시뮬 물리가 튄 판 (수집기 1.3 end = nan, 또는 1.2 · 2.14 가 버린 판) = 실패.
+    버린 판은 review/버림/<번호>_장면N/data.npz 에서 관절이 튀었는지 봄 — 튀지 않았으면 서버 탓으로 보고 그 장면의 다음 판을 봄,
+    파일이 없어 모르면 튐으로 셈 (unknown 에 따로 셈). 옛 셈 (센 판 모두) 은 old_* 에 남김."""
     F = os.path.join(TX, rel)
     R = jl(os.path.join(F, "progress", "bench_results.jsonl"))
     if not R:
         return None
-    n = len(R)
-    k = sum(1 for r in R if r.get("success"))
-    stg = {s: sum(1 for r in R if (r.get("stages") or {}).get(s)) for s in ("grasp", "lift", "over_slot", "success")}
-    ends = collections.Counter(r.get("end") or "?" for r in R)
-    qn = [r.get("queries") for r in R if r.get("queries")]
-    ms = [r.get("ms_mean") for r in R if r.get("ms_mean")]
-    sms = [r.get("server_ms_mean") for r in R if r.get("server_ms_mean")]
-    succ_s = [r.get("seconds") for r in R if r.get("success")]
-    ikf = sum(r.get("ik_fail") or 0 for r in R)
-    ikt = sum(r.get("ik_total") or 0 for r in R)
+    H = jl(os.path.join(F, "progress", "history.jsonl"))
+    rv = collections.defaultdict(list)
+    for d in glob.glob(os.path.join(F, "review", "버림", "*")):
+        b = os.path.basename(d)
+        if "_장면" in b and os.path.isdir(d):
+            try:
+                rv[int(b.split("_장면")[1].split("_")[0])].append((int(b.split("_")[0]), d))
+            except ValueError:
+                pass
+    rv = {k: [d for _, d in sorted(v)] for k, v in rv.items()}
+    by = collections.defaultdict(list)
+    for r in R:
+        by[r.get("scene")].append(r)
+    used, ridx, first = collections.Counter(), collections.Counter(), {}
+    n_unk = n_other = 0
+    for e in H:
+        t, sc = e.get("event"), e.get("scene")
+        if t == "bench_result":
+            row = by[sc][ridx[sc]] if ridx[sc] < len(by[sc]) else e
+            ridx[sc] += 1
+            first.setdefault(sc, ("nan" if e.get("end") == "nan" else "row", row))
+        elif t == "discard":
+            L = rv.get(int(sc), []) if sc is not None else []
+            k = used[sc]
+            used[sc] += 1
+            b = blew_up(os.path.join(L[k], "data.npz")) if k < len(L) else None
+            if b is False:
+                n_other += 1
+                continue
+            n_unk += b is None
+            first.setdefault(sc, ("nan" if b else "unknown", None))
+    rows = [r for kind, r in first.values() if kind == "row"]
+    n = len(first)
+    k = sum(1 for r in rows if r.get("success"))
+    stg = {s: sum(1 for r in rows if (r.get("stages") or {}).get(s)) for s in ("grasp", "lift", "over_slot", "success")}
+    ends = collections.Counter(r.get("end") or "?" for r in rows)
+    ends["nan"] = sum(1 for kind, _ in first.values() if kind in ("nan", "unknown"))
+    qn = [r.get("queries") for r in rows if r.get("queries")]
+    ms = [r.get("ms_mean") for r in rows if r.get("ms_mean")]
+    sms = [r.get("server_ms_mean") for r in rows if r.get("server_ms_mean")]
+    succ_s = [r.get("seconds") for r in rows if r.get("success")]
+    ikf = sum(r.get("ik_fail") or 0 for r in rows)
+    ikt = sum(r.get("ik_total") or 0 for r in rows)
     model = R[0].get("model")
-    return {"folder": rel, "n": n, "k": k, "rate": k / n, "ci": wilson(k, n), "stages": stg, "end": dict(ends),
-            "queries": q(qn), "ms_mean": q(ms), "server_ms": q(sms), "success_s": q(succ_s), "ik_fail_rate": (ikf / ikt) if ikt else None,
+    ko = sum(1 for r in R if r.get("success"))
+    return {"folder": rel, "rule": "first trial per scene; sim blow-up = failure", "n": n, "k": k, "rate": k / n if n else 0.0, "ci": wilson(k, n) if n else (0.0, 0.0),
+            "n_rows": len(rows), "nan_first": ends["nan"], "unknown_first": sum(1 for kind, _ in first.values() if kind == "unknown"), "other_discards": n_other,
+            "unknown_discards": n_unk, "old_k": ko, "old_n": len(R), "old_ci": wilson(ko, len(R)),
+            "stages": stg, "end": dict(ends), "queries": q(qn), "ms_mean": q(ms), "server_ms": q(sms), "success_s": q(succ_s), "ik_fail_rate": (ikf / ikt) if ikt else None,
             "model": os.path.basename(os.path.dirname(model)) if model else None,
-            "first_s": {s: q([(r.get("first_s") or {}).get(s) for r in R]) for s in ("grasp", "lift", "over_slot")},
+            "first_s": {s: q([(r.get("first_s") or {}).get(s) for r in rows]) for s in ("grasp", "lift", "over_slot")},
             "rows": [{"scene": r.get("scene"), "success": bool(r.get("success")), "stages": r.get("stages"), "end": r.get("end"),
-                      "seconds": r.get("seconds"), "min_hole_mm_lifted": r.get("min_hole_mm_lifted"), "max_lift_mm": r.get("max_lift_mm")} for r in R]}
+                      "seconds": r.get("seconds"), "min_hole_mm_lifted": r.get("min_hole_mm_lifted"), "max_lift_mm": r.get("max_lift_mm")} for r in rows]}
 
 
 def traj_stats(files):
@@ -278,7 +327,8 @@ for rel, x in S["fr3fail"].items():
         print("fr3fail %s 장면 %d 시도 %d 저장 %d 첫 %d 버림 %s 건너뜀 %s" % (rel, x["scenes"], x["attempts"], x["saved_stops"], x["first_try"], x["discard"], x["skip"]))
 for k, x in S["bench"].items():
     if x:
-        print("bench %-22s %2d/%2d (%.0f%%, %.1f–%.1f) 단계 %s 끝 %s 물음 %.0f ms %.0f 서버 %.0f · %s" % (k, x["k"], x["n"], 100 * x["rate"], 100 * x["ci"][0], 100 * x["ci"][1], x["stages"], x["end"],
+        print("bench %-22s %2d/%2d (%.0f%%, %.1f–%.1f) [옛 셈 %d/%d · 튐 첫 판 %d (모름 %d) · 튀지 않은 첫 판 %d] 단계 %s 끝 %s 물음 %.0f ms %.0f 서버 %.0f · %s" % (k, x["k"], x["n"], 100 * x["rate"], 100 * x["ci"][0], 100 * x["ci"][1],
+              x["old_k"], x["old_n"], x["nan_first"], x["unknown_first"], x["n_rows"], x["stages"], x["end"],
               x["queries"]["p50"] if x["queries"] else -1, x["ms_mean"]["p50"] if x["ms_mean"] else -1, x["server_ms"]["p50"] if x["server_ms"] else -1, x["model"]))
 for k, x in S["traj"].items():
     print("traj %-10s yaw5-95 %.1f..%.1f close %.1f..%.1f z_close p50 %.1f rel p50 %s x_close %.0f..%.0f turn p50 %.1f |yaw|>90 %d/%d" % (
