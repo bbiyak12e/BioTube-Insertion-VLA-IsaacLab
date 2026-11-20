@@ -9,6 +9,7 @@
 같은 장면(1103-27)을 두 로봇이 각자의 실험대 카메라로 수행한 짝 시연입니다. 1배속 영상(3인칭 · 손목): [demo_pair_scene27.mp4](figures/demo_pair_scene27.mp4)
 
 > **최근 소식**
+> - 2026-11-20 · 진행 기록 (11-10 \~ 11-19): [보고서 5 — 본 벤치와 중단](docs/report05_main_bench_stop/README.md) · [보고서 6 — 개선 실험](docs/report06_improve_1112_1113/README.md) · [보고서 7 — sim-to-real 전환과 1,000 판 데이터](docs/report07_sim2real_1000/README.md) · [보고서 8 — FR5 가까운 튜브 버릇 · DAgger · FR3 높게 닫음](docs/report08_dagger_1114_1116/README.md) · [보고서 9 — FR5 영상 형식 · DAgger 다시 · 실물과 같은 수식 · 약점](docs/report09_final_1116_1119/README.md)
 > - 2026-11-16 · [보고서 4 — 시뮬 벤치 결과: FR3 · FR5 VLA 단독 · DAgger · 수식 마무리](docs/report04_sim_bench/README.md) ([FR5](docs/report04_sim_bench/fr5/README.md) · [FR3](docs/report04_sim_bench/fr3/README.md))
 > - 2026-11-10 · [보고서 3 — 실물 설정으로 다시 모은 짝 시연: 수학 모델의 확률 · 정확성, 실물 형식 변환, 실물 데이터와 비교](docs/report03_realmatched_data/README.md)
 > - 2026-11-06 · [보고서 2 — 시연 100개로 학습한 GR00T: 벤치마크 결과, 수집 설정 실수와 고칠 방향](docs/report02_vla100_bench/README.md) · 개발 기록 [docs/12](docs/12-자동수집기.md) 갱신
