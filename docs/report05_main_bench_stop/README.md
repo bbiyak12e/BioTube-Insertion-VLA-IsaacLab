@@ -1,6 +1,6 @@
 # 보고서 5 — 진행 기록 11-10 \~ 11-12: 본 벤치와 중단 — 물리 튐 규칙, 단계별 진단, 학습량, 워크스테이션 속도
 
-2026-11-10 (화) \~ 11-12 (목) 저녁 · Sim-to-Real Post-Training (시뮬레이션 파트) · Isaac Sim 6.0.1 · Isaac Lab 3.0 · GR00T N1.7
+2026-11-10 (화) \~ 11-12 (목) 저녁 · Sim-to-Real Post-Training (시뮬레이션 파트) · Isaac Sim 6.0.1 · Isaac Lab 3.0 · GR00T N1.7 · [English](README_EN.md)
 
 이 문서는 [보고서 3](../report03_realmatched_data/README.md) 뒤부터 [보고서 4](../report04_sim_bench/README.md) 의 결과가 나오기까지 사이에 있었던 일을 날짜 순서로 적은 기록입니다. 보고서 4 가 최종 숫자를 모은 결과 보고서라면, 이 기록은 **그 숫자에 이르는 동안 무엇을 보고, 무엇을 의심하고, 어떻게 확인해 무엇을 바꿨는지**를 남깁니다.
 

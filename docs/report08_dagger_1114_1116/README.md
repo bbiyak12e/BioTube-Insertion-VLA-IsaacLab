@@ -1,6 +1,6 @@
 # 보고서 8 — 진행 기록 11-14 \~ 11-16: FR5 가 먼 튜브로 못 가는 까닭, DAgger 를 앞당김, FR3 가 쥐지 못하는 까닭
 
-2026-11-14 (토) \~ 11-16 (월) · Sim-to-Real Post-Training (시뮬레이션 파트) · Isaac Sim 6.0.1 · Isaac Lab 3.0 · GR00T N1.7
+2026-11-14 (토) \~ 11-16 (월) · Sim-to-Real Post-Training (시뮬레이션 파트) · Isaac Sim 6.0.1 · Isaac Lab 3.0 · GR00T N1.7 · [English](README_EN.md)
 
 [보고서 7](../report07_sim2real_1000/README.md) 에서 실물에 맞춘 시뮬 설정과 1,000 판 데이터를 만든 뒤, 그 모델들을 재며 [보고서 4](../report04_sim_bench/README.md) 의 결과에 이르기까지 사흘 동안의 기록입니다. 이 기간에는 **질문 하나마다 판정 기준을 결과를 보기 전에 적고**, 기준대로 원인 후보를 하나씩 지우거나 남겼습니다.
 

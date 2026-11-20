@@ -1,6 +1,6 @@
 # 보고서 9 — 진행 기록 11-16 \~ 11-19: FR5 영상 형식을 FR3 와 같게, DAgger 다시, 실물과 같은 수식 점검, VLA + 수식의 약점
 
-2026-11-16 (월) \~ 11-19 (목) · Sim-to-Real Post-Training (시뮬레이션 파트) · Isaac Sim 6.0.1 · Isaac Lab 3.0 · GR00T N1.7
+2026-11-16 (월) \~ 11-19 (목) · Sim-to-Real Post-Training (시뮬레이션 파트) · Isaac Sim 6.0.1 · Isaac Lab 3.0 · GR00T N1.7 · [English](README_EN.md)
 
 [보고서 4](../report04_sim_bench/README.md) 를 낸 뒤 나흘 동안의 기록입니다. FR5 학습 영상을 FR3 와 같은 방식으로 바꾸자 FR5 정책이 크게 올랐고, 그 새 모델로 DAgger 를 다시 했습니다. 마지막 이틀은 VLA + 수식의 수식을 실물과 같은 조건으로 점검하고, VLA + 수식이 어디서 실패하는지 (약점) 를 정리해 최종 보고서를 썼습니다. **이 기간의 FR5 숫자가 보고서 4 의 FR5 숫자를 대신합니다.**
 
@@ -150,7 +150,7 @@ VLA + 수식은 견준 10 쌍 모두에서 정책만보다 성공이 올랐다. 
 | FR3 · 1,000 판 | 4 % | 4 % | 98 % | 78 % |
 | FR3 · 1,000 판 + DAgger | 62 % | 34 % | 100 % | 90 % |
 
-![그림 5 · 최종 숫자](figures/fig9_final_pairs_ko.png)
+<img src="figures/fig9_final_pairs_ko.png" alt="그림 5 · 최종 숫자" width="680">
 
 **그림 5.** 최종 숫자 — 정책만 (흰 점) 과 VLA + 수식 (찬 점), 같은 모델 · 같은 50 장면.
 
