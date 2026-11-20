@@ -2,7 +2,7 @@
 
 2026-11-06 · Sim-to-Real Post-Training (simulation part) · GR00T N1.7 · Isaac Sim 6.0.1 · Isaac Lab 3.0 · [한국어](README.md)
 
-Official copy: [BioRoboticsIsaacSim / sim_isaac / Report 2](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac/reports/02_vla100_bench) · [front page](../../README_EN.md) of this repository
+Official copy: [BioRoboticsIsaacSim / sim_isaac_tube / Report 2](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac_tube/reports/02_vla100_bench) · [front page](../../README_EN.md) of this repository
 
 ## Summary
 
@@ -24,7 +24,7 @@ Official copy: [BioRoboticsIsaacSim / sim_isaac / Report 2](https://github.com/S
 | Benchmark | Letting the model perform the task in sim, judging it automatically, and measuring the success rate |
 | Unseen scenes | Layouts · lighting generated with base seed 7700, different from the training data (base seed 1103) |
 | Action chunk | The 16 future action steps the model returns for one query |
-| Scripted model (auto collector) | The demo generator that plans paths from the sim's ground-truth state (exact tube · hole poses) ([Report 1](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/blob/main/sim_isaac/reports/01_sim_env_autodemo/README_EN.md)) |
+| Scripted model (auto collector) | The demo generator that plans paths from the sim's ground-truth state (exact tube · hole poses) ([Report 1](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/blob/main/sim_isaac_tube/reports/01_sim_env_autodemo/README_EN.md)) |
 | Layout A · B | A = the two tubes are in the end holes of the source rack, B = any two holes of the source rack |
 | AB / ab | AB = sim data collected so far (A 300 pairs = 100 + 200 more, B 300 pairs — FR5 still following), ab = data to be newly collected with the real settings |
 | 95 % CI | Confidence interval of the success rate (Wilson). Wider with fewer trials |

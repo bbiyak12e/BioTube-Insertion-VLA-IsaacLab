@@ -2,7 +2,7 @@
 
 2026-11-06 · Sim-to-Real Post-Training (시뮬레이션 파트) · GR00T N1.7 · Isaac Sim 6.0.1 · Isaac Lab 3.0 · [English](README_EN.md)
 
-공식본: [BioRoboticsIsaacSim / sim_isaac / 보고서 2](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac/reports/02_vla100_bench) · 이 레포의 [첫 페이지](../../README.md)
+공식본: [BioRoboticsIsaacSim / sim_isaac_tube / 보고서 2](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac_tube/reports/02_vla100_bench) · 이 레포의 [첫 페이지](../../README.md)
 
 ## 요약
 
@@ -24,7 +24,7 @@
 | 벤치(마크) | 시뮬에서 모델에게 과제를 직접 시키고 자동으로 판정해 성공률을 재는 것 |
 | 처음 보는 장면 | 학습 데이터(기본 시드 1103)와 다른 기본 시드 7700으로 만든 배치 · 조명 |
 | 행동 묶음 | 모델이 한 번 물음에 내놓는 앞으로의 동작 16칸 |
-| 수학 모델 (자동 수집기) | 시뮬의 정답 상태(튜브 · 구멍의 정확한 자리)를 보고 경로를 계산하는 시연 생성기 ([보고서 1](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/blob/main/sim_isaac/reports/01_sim_env_autodemo/README.md)) |
+| 수학 모델 (자동 수집기) | 시뮬의 정답 상태(튜브 · 구멍의 정확한 자리)를 보고 경로를 계산하는 시연 생성기 ([보고서 1](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/blob/main/sim_isaac_tube/reports/01_sim_env_autodemo/README.md)) |
 | A · B 배치 | A = 두 튜브가 원래 Rack 양 끝 구멍, B = 원래 Rack의 아무 두 구멍 |
 | AB / ab | AB = 지금까지 모은 시뮬 데이터 (A 300 짝 = 100 + 추가 200, B 300 짝 — FR5 는 따라가는 중), ab = 실물 설정으로 새로 모을 데이터 |
 | 95 % 범위 | 성공률의 신뢰 구간 (Wilson). 시도 수가 적을수록 넓다 |

@@ -471,4 +471,4 @@ Same model and same 50 scenes in every row. Successes /50, Fisher exact test. "R
 | FR3 DAgger vs recovery | Fixed + real-eval · VLA only · lifted 60 mm, p < 0.05 | Different (16 → 86/100, p = 1.4 × 10⁻²⁴) |
 | VLA + formula handoff conditions | Cap 25 mm · 6 mm to the second cap · slot 25 mm (fixed during the experiment) | — |
 
-Previous report: [Report 3 — paired demos re-collected with real-robot settings](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac/reports/03_realmatched_data) · development log: [BioTube-Insertion-VLA-IsaacLab](https://github.com/bbiyak12e/BioTube-Insertion-VLA-IsaacLab)
+Previous report: [Report 3 — paired demos re-collected with real-robot settings](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac_tube/reports/03_realmatched_data) · development log: [BioTube-Insertion-VLA-IsaacLab](https://github.com/bbiyak12e/BioTube-Insertion-VLA-IsaacLab)

@@ -158,7 +158,7 @@ The same 50 scenes not used in training, first try per scene. On the FR3 real-ev
 
 **Read with care.** Sim numbers are not predictions of real success — they are a tool for comparing models within the same sim and the same physics. FR5 sim success relies on a grasp assist the real robot does not have, and FR3 sim has no such assist. The fixed layout is in effect two layouts × 25 scenes, so performance at unseen positions is read from the random layout.
 
-## 8. Next (after the exam period)
+## 8. Next (planned)
 
 - Real-like formula: choose the formula values → check again, FR5 third-person red check, VLA + formula side bench.
 - Compare the real team's real evaluations of the two FR5 models with the sim using the same S0–S9.

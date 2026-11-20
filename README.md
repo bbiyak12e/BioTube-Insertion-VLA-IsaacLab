@@ -2,38 +2,43 @@
 
 ### 지름 30 mm 튜브를 31 mm 구멍에 꽂을 수 있을까? — 바이오 실험 튜브 정밀 삽입을 위한 Sim-to-Real VLA (Franka FR3 · FAIRINO FR5, Isaac Sim / Isaac Lab)
 
-[English](README_EN.md) · [목차](#목차) · 수식 정리: [docs/math_ko.md](docs/math_ko.md) · 공식 정리본: [BioRoboticsIsaacSim / sim_isaac](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac)
+[English](README_EN.md) · [목차](#목차) · 수식 정리: [docs/math_ko.md](docs/math_ko.md) · 공식 정리본: [BioRoboticsIsaacSim / sim_isaac_tube](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac_tube) · 같은 실험대의 스포이드 · 비커 실험: [BioRoboticsIsaacSim](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim)
 
-![같은 장면을 FR3(왼쪽) · FR5(오른쪽)가 각각 수행한 자동 시연 — 3인칭 카메라, 4배속](figures/demo_pair_third_4x.gif)
+![DAgger 로 다시 학습한 GR00T N1.7 이 혼자 꽂은 판 — FR3 (왼쪽) · FR5 (오른쪽), 3인칭, 4배속](figures/demo_pair_dagger_third_4x.gif)
 
-같은 장면(1103-27)을 두 로봇이 각자의 실험대 카메라로 수행한 짝 시연입니다. 1배속 영상(3인칭 · 손목): [demo_pair_scene27.mp4](figures/demo_pair_scene27.mp4)
+**DAgger 로 다시 학습한 GR00T N1.7 이 혼자 (정책만) 집고 꽂은 판**입니다 — 학습에 쓰지 않은 벤치 장면 하나 (무작위 배치 장면 1, 두 로봇이 같은 배치 · 조명), 왼쪽 FR3 · 오른쪽 FR5, 3인칭, 4배속. DAgger 전 모델은 두 로봇 모두 이 장면에서 실패했습니다. 1배속 (3인칭 · 손목): [demo_pair_dagger_1x.mp4](figures/demo_pair_dagger_1x.mp4) · 처음 자동 시연 (11-02): [demo_pair_third_4x.gif](figures/demo_pair_third_4x.gif)
 
 > **최근 소식**
-> - 2026-11-20 · 진행 기록 (11-10 \~ 11-19): [보고서 5 — 본 벤치와 중단](docs/report05_main_bench_stop/README.md) · [보고서 6 — 개선 실험](docs/report06_improve_1112_1113/README.md) · [보고서 7 — sim-to-real 전환과 1,000 판 데이터](docs/report07_sim2real_1000/README.md) · [보고서 8 — FR5 가까운 튜브 버릇 · DAgger · FR3 높게 닫음](docs/report08_dagger_1114_1116/README.md) · [보고서 9 — FR5 영상 형식 · DAgger 다시 · 실물과 같은 수식 · 약점](docs/report09_final_1116_1119/README.md)
-> - 2026-11-16 · [보고서 4 — 시뮬 벤치 결과: FR3 · FR5 VLA 단독 · DAgger · 수식 마무리](docs/report04_sim_bench/README.md) ([FR5](docs/report04_sim_bench/fr5/README.md) · [FR3](docs/report04_sim_bench/fr3/README.md))
-> - 2026-11-10 · [보고서 3 — 실물 설정으로 다시 모은 짝 시연: 수학 모델의 확률 · 정확성, 실물 형식 변환, 실물 데이터와 비교](docs/report03_realmatched_data/README.md)
-> - 2026-11-06 · [보고서 2 — 시연 100개로 학습한 GR00T: 벤치마크 결과, 수집 설정 실수와 고칠 방향](docs/report02_vla100_bench/README.md) · 개발 기록 [docs/12](docs/12-자동수집기.md) 갱신
-> - 2026-11-04 · GR00T N1.7 미세조정 (FR3 · FR5 시연 100개씩) · 처음 보는 50 장면 벤치마크
-> - 2026-11-03 · [실물 환경 → 디지털 트윈](docs/real_to_twin/README.md) 문서 추가 · FR3 시연 100개 수집 끝
-> - 2026-11-02 · FR3 · FR5 짝 시연 100개 자동 수집 시작
-> - 2026-11-02 · GR00T N1.7 설치 완료
-> - 2026-11-02 · 확인용 영상 · 움직임 튐 점검 도구 추가
+> - 2026-11-20 · 첫 화면을 11-19 결과로 새로 씀 — DAgger 뒤 정책만 영상 · 전체 흐름 그림 · 로봇별 차이 (실물 맞춤 값) · 결과. 연구실 레포의 튜브 폴더가 `sim_isaac_tube` 로 바뀜 (스포이드 · 비커 실험은 그 옆 폴더)
+> - 2026-11-20 · 진행 기록 보고서 [5](docs/report05_main_bench_stop/README.md) · [6](docs/report06_improve_1112_1113/README.md) · [7](docs/report07_sim2real_1000/README.md) · [8](docs/report08_dagger_1114_1116/README.md) · [9](docs/report09_final_1116_1119/README.md) (11-10 \~ 11-19) — 최종 숫자는 [11장 결과](#11-결과)
+> - 2026-11-16 · [보고서 4 — 시뮬 벤치 결과: VLA 단독 · DAgger · VLA + 수식](docs/report04_sim_bench/README.md) ([FR5](docs/report04_sim_bench/fr5/README.md) · [FR3](docs/report04_sim_bench/fr3/README.md))
+
+<details>
+<summary>지난 소식 (11-02 ~ 11-10)</summary>
+
+- 2026-11-10 · [보고서 3 — 실물 설정으로 다시 모은 짝 시연](docs/report03_realmatched_data/README.md)
+- 2026-11-06 · [보고서 2 — 시연 100 개로 학습한 GR00T](docs/report02_vla100_bench/README.md) · 개발 기록 [docs/12](docs/12-자동수집기.md) 갱신
+- 2026-11-04 · GR00T N1.7 미세조정 (FR3 · FR5 시연 100 개씩) · 처음 보는 50 장면 벤치
+- 2026-11-03 · [실물 환경 → 디지털 트윈](docs/real_to_twin/README.md) 문서 추가 · FR3 시연 100 개 수집 끝
+- 2026-11-02 · FR3 · FR5 짝 시연 100 개 자동 수집 시작 · GR00T N1.7 설치 · 확인용 영상 · 움직임 튐 점검 도구 추가
+
+</details>
 
 ---
 
 ## 목차
 
-1. **개요 · 과제 · 전체 흐름** — [1장](#1-개요) · [2장](#2-과제) · [3장](#3-전체-흐름-갱신)
+1. **개요 · 과제 · 전체 흐름** — [1장](#1-개요) · [2장](#2-과제) · [3장](#3-전체-흐름)
 2. **[실물 환경 → 디지털 트윈](docs/real_to_twin/README.md)** — 실측에서 모양으로, 실물 화면 영역(세그먼트) 따기, 카메라 맞추기, 색 세그먼트로 실물과 비교 · 요약은 [4장](#4-디지털-트윈-isaac-sim) · [로봇별 차이](#로봇별-차이)
 3. **도메인 랜덤화 (Isaac Lab)** — [5장](#5-도메인-랜덤화-isaac-lab)
 4. **자동 시연 수집기 (BioTube-AutoDemo-IsaacLab)** — [6장](#6-biotube-autodemo-isaaclab--자동-시연-수집기) · 자세한 개발 문서 [docs/12-자동수집기.md](docs/12-자동수집기.md)
 5. **수식** — 요약 [7장](#7-수식-요약) · 전체 [docs/math_ko.md](docs/math_ko.md) ([디지털 트윈](docs/math_ko.md#4-수식과-적용--디지털-트윈) · [도메인 랜덤화](docs/math_ko.md#5-수식과-적용--도메인-랜덤화) · [자동 시연](docs/math_ko.md#6-수식과-적용--자동-시연-생성과-판정))
-6. **데이터 품질 도구 · 데이터셋** — [8장](#8-데이터-품질-도구) · [9장](#9-데이터셋-현황-갱신)
-7. **GR00T · 결과 · 로드맵** — [10장](#10-vla--gr00t-n17) · [11장](#11-결과-갱신) · [12장](#12-로드맵) · 보고서 [2](docs/report02_vla100_bench/README.md) · [3](docs/report03_realmatched_data/README.md) · **[4 — 시뮬 벤치 결과](docs/report04_sim_bench/README.md)** · 진행 기록 [5](docs/report05_main_bench_stop/README.md) · [6](docs/report06_improve_1112_1113/README.md) · [7](docs/report07_sim2real_1000/README.md) · [8](docs/report08_dagger_1114_1116/README.md) · [9](docs/report09_final_1116_1119/README.md)
+6. **데이터 품질 도구 · 데이터셋** — [8장](#8-데이터-품질-도구) · [9장](#9-데이터셋)
+7. **GR00T · 결과 · 로드맵** — [10장](#10-vla--gr00t-n17) · [11장](#11-결과) · [12장](#12-로드맵) · 보고서 [2](docs/report02_vla100_bench/README.md) · [3](docs/report03_realmatched_data/README.md) · **[4 — 시뮬 벤치 결과](docs/report04_sim_bench/README.md)** · 진행 기록 [5](docs/report05_main_bench_stop/README.md) · [6](docs/report06_improve_1112_1113/README.md) · [7](docs/report07_sim2real_1000/README.md) · [8](docs/report08_dagger_1114_1116/README.md) · [9](docs/report09_final_1116_1119/README.md)
 8. **실행 방법 · 폴더** — [13장](#13-실행-방법) · [14장](#14-폴더-구성과-환경)
 9. **🍪 여기까지 온 과정** — [맨 아래](#과제는-세-번-바뀌었다)
 
-공식 정리본 (연구실 레포): [BioRoboticsIsaacSim / sim_isaac](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac)
+공식 정리본 (연구실 레포): [BioRoboticsIsaacSim / sim_isaac_tube](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac_tube) · 같은 실물 재현 실험대로 하는 스포이드 · 비커 붓기 실험도 연구실 레포 [BioRoboticsIsaacSim](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim) 에 있습니다.
 
 ## 1. 개요
 
@@ -54,13 +59,15 @@
 | 어려운 점 | 튜브 30 mm · 구멍 31 mm → 틈 1 mm. 바닥이 반구(반지름 15 mm)라 조금만 어긋나도 기울어 턱에 걸림 |
 | 매 장면 바뀌는 것 | 두 Rack의 자리 · 방향, 빨강 · 노랑 좌우, 빨간 링 구멍(4개 중 하나), 조명 밝기 · 색 |
 
-![같은 장면의 시작(왼쪽) · 꽂은 뒤(오른쪽) — 위 FR3, 아래 FR5](figures/scene_pair.png)
+![실물 맞춤 시뮬의 같은 장면 — 시작 (왼쪽) · 꽂기 (오른쪽), 위 FR3 · 아래 FR5](figures/scene_pair_v2.jpg)
 
-## 3. 전체 흐름 (갱신)
+실물 맞춤 시뮬 (11-13 부터) 의 같은 장면입니다 — 왼쪽 시작, 오른쪽 꽂기, 위 FR3 · 아래 FR5. 처음 설정 (11-02) 의 장면: [scene_pair.png](figures/scene_pair.png)
 
-![전체 흐름과 진행 상태 (11-06 기준 그림)](figures/pipeline_ko.png)
+## 3. 전체 흐름
 
-그림은 11-06 기준입니다. 그 뒤로 실물 형식 변환 ([보고서 3](docs/report03_realmatched_data/README.md)) → 실물 맞춤 시뮬 · 로봇마다 1,000 판 ([보고서 7](docs/report07_sim2real_1000/README.md)) → VLA + 수식 · DAgger ([보고서 4](docs/report04_sim_bench/README.md) · [8](docs/report08_dagger_1114_1116/README.md) · [9](docs/report09_final_1116_1119/README.md)) 까지 왔고, 지금 상태는 [12장 로드맵](#12-로드맵) 에 있습니다.
+![전체 흐름과 진행 상태 (2026-11-20)](figures/pipeline_v2_ko.png)
+
+초록은 끝난 단계, 파랑은 DAgger 로 되풀이하는 고리, 회색은 차후 예정입니다 (2026-11-20). 단계별 보고서는 실물 형식 변환 [3](docs/report03_realmatched_data/README.md) → 실물 맞춤 시뮬 · 로봇마다 1,000 판 [7](docs/report07_sim2real_1000/README.md) → VLA + 수식 · DAgger [4](docs/report04_sim_bench/README.md) · [8](docs/report08_dagger_1114_1116/README.md) · [9](docs/report09_final_1116_1119/README.md) 이고, 남은 일은 [12장 로드맵](#12-로드맵) 에 있습니다.
 
 ## 4. 디지털 트윈 (Isaac Sim)
 
@@ -75,20 +82,32 @@
 
 ### 로봇별 차이
 
-장면 · 파이프라인 · 판정은 두 로봇이 같고, 아래만 다릅니다.
+장면 · 파이프라인 · 판정은 두 로봇이 같고, 아래만 다릅니다. 값은 지금 쓰는 **실물 맞춤 시뮬 (11-13 부터)** 기준입니다 ([보고서 7](docs/report07_sim2real_1000/README.md) 2 · 4 절).
 
 | 항목 | FR3 | FR5 |
 |---|---|---|
 | 로봇 · 그리퍼 | Franka Research 3 · Franka Hand (평행, 한쪽 40 mm) | FAIRINO FR5 · DH-Robotics AG-95 (한쪽 47.5 mm) |
 | 팔 관절 | 7 | 6 |
-| TCP (손끝 기준점) | 플랜지 + 97.0 mm | 플랜지 + 171.2 mm (둘 다 패드 접촉면 − 7.12 mm) |
-| 계획 한계 | 관절 0.8 rad/s (7번 0.15 rad/s) | 관절 15 °/s · 120 °/s², 플랜지 + 167.6 mm 점 ≥ 책상 위 45 mm |
+| TCP (시뮬, 손끝 기준점) | 플랜지 + 97.0 mm | 플랜지 + 171.2 mm (둘 다 패드 접촉면 − 7.12 mm) |
+| 3인칭 카메라 | 받침 기준 (1.060, −0.028, 0.527) m · 숙임 −30.6° · 화각 88.7° — 로봇 PC 의 카메라 보정값으로 풀어 실물 모형과 평균 0.52 px | 실물 팀이 맞춘 설정값 (카메라 높이 등) |
+| 손목 카메라 | 손 기준 (62.3, −16.3, −46.2) mm · 화각 88.9° (실물 보정 8 점) | 실물 팀 설정 (손목 화면은 돌리지 않음) |
+| 시작 자세 | 실물 home 관절 [1.4, −17.2, 0.4, −141.7, 1.5, 124.8, 46.2]° — 손끝 (434.3, 17.3, 297.2) mm | 실물 팀 설정 — 손끝 (437, −19, 292) mm |
+| 받침 높이 | 23.5 mm 낮춤 → 잡는 높이가 실물 실측과 0.3 mm | 책상보다 23 mm 아래 (실물 팀 설정) |
+| 계획 한계 | 관절 0.8 rad/s (7번 0.15 rad/s) · 속도 배율 0.4 \~ 0.6 (실물 기록) | 관절 45 °/s · 120 °/s² (실물 제어판 한계, 11-05 부터), 플랜지 + 167.6 mm 점이 베이스 기준 45 mm 위 |
+| 시뮬 보조 | 없음 (물리로만 쥠) | 쥔 동안 손끝 기준 튜브 자세 유지 (놓으면 물리로) — 실물에 없음 |
+| 학습 데이터 (실물 형식) | 상태 10 = 손끝 xyz + rot6d (회전 행렬 앞 두 열) + 손가락 폭 · 받침 (`fr3_link0`) 기준 · 손끝 = 플랜지 + 103.4 mm | 상태 11 = 손끝 xyz + rot6d (앞 두 행) + 반폭 + (−반폭) · 작업 프레임 (베이스를 z 둘레 −77.2° 돌림) · 손끝 = 플랜지 + 167.6 mm |
+
+<details>
+<summary>처음 설정 (11-02) 값</summary>
+
+| 항목 | FR3 | FR5 |
+|---|---|---|
 | 3인칭 카메라 | 받침 기준 (1.26, −0.02, 0.47) m, 숙임 −21.4°, 화각 69.7° | (0.96, −0.09, 0.50) m, 숙임 −31.7°, 화각 87° |
 | 시작 자세 | [2.8, −16.0, 0, −150.9, 0, 134.9, 47.8]° | [−4.0, −70.2, −110.2, −89.6, 90.0, −1.5]° |
-| 시뮬 보조 | 없음 (물리로만 쥠) | 쥔 동안 손끝 기준 튜브 자세 유지 (놓으면 물리로) |
-| 상태 · 동작 길이 | 17 (손끝 9 + 그리퍼 1 + 관절 7) | 16 (손끝 9 + 그리퍼 1 + 관절 6) |
+| 계획 한계 | 관절 0.8 rad/s (7번 0.15 rad/s) | 관절 15 °/s · 120 °/s² |
+| 상태 · 동작 길이 (수집 기록) | 17 (손끝 9 + 그리퍼 1 + 관절 7) | 16 (손끝 9 + 그리퍼 1 + 관절 6) |
 
-위 카메라 · 시작 자세는 처음 설정 (11-02) 값입니다. **11-13 부터는 실물 맞춤 시뮬**을 씁니다 — FR3 는 로봇 PC 자료로 3인칭 카메라 (1.060, −0.028, 0.527) m · 숙임 −30.6° · 화각 88.7° (실물 모형과 평균 0.52 px), 시작 자세 = 실물 home, 받침 23.5 mm 낮춤. FR5 는 실물 팀이 바꾼 값 11 개 (받침 높이 · 시작 자세 · 3인칭 카메라 높이 · 그리퍼 값 표 등) ([보고서 7](docs/report07_sim2real_1000/README.md) 2 · 4 절). 학습할 때 상태 · 동작은 로봇마다 실물 형식으로 바꿉니다 ([6-4](#6-4-데이터-형식)).
+</details>
 
 ## 5. 도메인 랜덤화 (Isaac Lab)
 
@@ -105,7 +124,9 @@
 
 ### 6-1. 한 시연의 단계
 
-![FR5 한 시연 (4배속, 왼쪽 3인칭 · 오른쪽 손목)](figures/demo_fr5_full_4x.gif)
+![처음 설정 (11-02) 의 FR5 자동 시연 한 판 — 4배속, 왼쪽 3인칭 · 오른쪽 손목](figures/demo_fr5_full_4x.gif)
+
+처음 설정 (11-02, 640×360) 으로 모은 FR5 자동 시연 한 판입니다 (4배속). 지금은 실물 맞춤 시뮬에서 갈래를 나눠 모읍니다 ([9장](#9-데이터셋)).
 
 | 단계 | 하는 일 |
 |---|---|
@@ -116,14 +137,14 @@
 | 꽂기 | **튜브 축을 따라** 내려감 |
 | 놓기 · 위로 빠지기 | 놓고 멈춘 뒤 위로 빠짐 |
 
-경로 방식(최소 저크 · 둥글린 꺾은선 · 수직 축 회전 · 관절 속도 검사)은 실물 FR3 자동 시연 코드(`gello_auto.py`)에서 옮겼고, FR5는 실물 안전 필터와 같은 한계(관절 15 °/s · 120 °/s², 플랜지 + 167.6 mm 점이 책상 위 45 mm 이상)를 씁니다.
+경로 방식(최소 저크 · 둥글린 꺾은선 · 수직 축 회전 · 관절 속도 검사)은 실물 FR3 자동 시연 코드(`gello_auto.py`)에서 옮겼고, FR5는 실물 제어판 안전 필터와 같은 한계 (관절 15 °/s → 11-05 부터 실물 값 45 °/s · 120 °/s², 플랜지 + 167.6 mm 점이 베이스 기준 45 mm 위) 를 씁니다.
 시연마다 높이 · 호 · 머무는 시간 · 속도(0.85\~1.15배)를 조금씩 바꿔 다양성을 줍니다.
 
 ![자동 시연 궤적 — 위에서 본 손끝 길, 높이, 손목 각도, 관절 속도/한계 (FR3 · FR5 같은 장면)](figures/trajectory_ko.png)
 
 ### 6-2. 판정 · 저장 · 재시도
 
-![FR5 꽂기 구간 (1배속)](figures/demo_fr5_insert_1x.gif)
+![처음 설정 (11-02) 의 FR5 꽂기 구간 — 1배속](figures/demo_fr5_insert_1x.gif)
 
 - **판정:** 구멍 턱 높이에서 튜브 축의 거리 ≤ 2 mm · 바닥 깊이 · 기울기 ≤ 12° · 멈춤 확인 (노란 튜브 · 링 제자리)
 - **저장:** 성공만 LeRobot v2(GR00T 형식)로 저장. 실패는 이유와 함께 `review/버림/`에 남김
@@ -135,15 +156,15 @@ FR3가 장면을 저장하면 FR5가 **같은 시드로 같은 장면**을 바�
 
 ### 6-4. 데이터 형식
 
-| 항목 | 값 |
-|---|---|
-| 영상 | `observation.images.third` · `observation.images.wrist`, 640×360, 30 fps, H.264 |
-| 상태 `observation.state` | 손끝 x · y · z + 자세 rot6d(회전 행렬 앞 두 행) + 그리퍼(0 벌림 \~ 1 닫힘) + 관절 (FR3 7 · FR5 6) |
-| 동작 `action` | 같은 배치의 목표값 |
-| 지시문 | `task_index` → `put the red tube in the red slot` |
-| 기록 | `progress/episodes.jsonl` — 장면 · 시드 · `pair_id` · `set` · 판정 값 · 한 스텝 시간 |
+수집기는 시뮬 기록을 남기고, 학습에는 로봇마다 **실물 형식**으로 바꿔 씁니다 (`tools/common_to_real.py`, [보고서 3](docs/report03_realmatched_data/README.md)).
 
-지금은 848×480 으로 모으고 (`--cam-res 848x480`), 학습에는 로봇마다 **실물 형식**으로 바꿔 씁니다 (`tools/common_to_real.py`) — 10 Hz · 판마다 첫 화면 밝기를 실물 목표로 · 실물 상태 정의 (FR3 손끝 xyz + rot6d + 손가락 폭, FR5 손끝 xyz + rot6d + 그리퍼 반폭) · 행동은 손끝 상대 이동 + 그리퍼 ([보고서 3](docs/report03_realmatched_data/README.md)).
+| 항목 | 수집 기록 (시뮬) | 학습 데이터 (실물 형식) |
+|---|---|---|
+| 영상 | `observation.images.third` · `observation.images.wrist`, 848×480 (`--cam-res 848x480`), H.264 — 처음 (11-02) 은 640×360 · 30 fps | 848×480 · 10 Hz, 판마다 첫 화면 밝기를 실물 목표로, 카메라별 흰색 균형. 모델 입력은 비율을 지켜 452×256 |
+| 상태 `observation.state` | 손끝 x · y · z + 자세 rot6d (회전 행렬 앞 두 행) + 그리퍼 (0 벌림 \~ 1 닫힘) + 관절 (FR3 7 · FR5 6) | 로봇마다 실물 정의 — FR3 10 · FR5 11 ([로봇별 차이](#로봇별-차이)) |
+| 동작 `action` | 같은 배치의 목표값 | 로봇마다 실물 정의로 다시 계산 (기준점 · rot6d 규약 · 좌표계 · 그리퍼 값의 뜻). 학습은 손끝 상대 이동 + 그리퍼 |
+| 지시문 | `task_index` → `put the red tube in the red slot` | 같음 |
+| 기록 | `progress/episodes.jsonl` — 장면 · 시드 · `pair_id` · `set` · 판정 값 · 한 스텝 시간 | — |
 
 ## 7. 수식 (요약)
 
@@ -184,7 +205,7 @@ p(z_c)=b+\frac{z_c-b_z}{a_z}\,a,\qquad d=\big\lVert\,[p(z_c)-h]_{xy}\big\rVert\l
 | `tools/common_check_dataset.py` | LeRobot v2 형식 점검 (행 수 = 영상 화면 수, 빈 값 없음 …) |
 | `tools/common_check_motion.py` | 상태 · 동작에서 홀로 튀어나온 가속도(움직임 튐) 찾기 |
 
-## 9. 데이터셋 현황 (갱신)
+## 9. 데이터셋
 
 **지금 학습 데이터 (로봇마다, 11-13 \~ 18):** 실물 맞춤 시뮬 1,000 판 + DAgger 구간 (FR5 597 · FR3 449, 각 300 판에서) — [보고서 7](docs/report07_sim2real_1000/README.md) · [8](docs/report08_dagger_1114_1116/README.md)
 
@@ -219,7 +240,7 @@ p(z_c)=b+\frac{z_c-b_z}{a_z}\,a,\qquad d=\big\lVert\,[p(z_c)-h]_{xy}\big\rVert\l
 - **벤치마크:** 수집기의 장면 · 판정을 그대로 쓰고 입력만 정책으로 (`lab/common_bench.py` · 정책 서버 `tools/common_groot_server.py`). 장면마다 첫 판, 물리 튐 = 실패, S0 \~ S9 단계 채점 (`tools/common_bench_stage.py`), VLA + 수식 (`lab/common_bench_hybrid.py`) 은 따로 보고
 - **DAgger:** 정책을 300 장면에서 돌려 정책이 빗나간 자리에서 수식이 바로잡은 구간만 더해 다시 학습 ([보고서 8](docs/report08_dagger_1114_1116/README.md))
 
-## 11. 결과 (갱신)
+## 11. 결과
 
 실물 맞춤 시뮬 · 학습에 쓰지 않은 같은 50 장면 · 장면마다 첫 판 (물리 튐 = 실패) 의 성공률입니다 (2026-11-19, [보고서 9](docs/report09_final_1116_1119/README.md)).
 
@@ -236,7 +257,11 @@ p(z_c)=b+\frac{z_c-b_z}{a_z}\,a,\qquad d=\big\lVert\,[p(z_c)-h]_{xy}\big\rVert\l
 - **VLA + 수식:** 정책이 튜브 · 칸을 고르고, 정책이 뚜껑 · 빨간 칸 25 mm 안으로 오면 마지막 잡기 · 꽂기만 자동 시연 수식이 넘겨받는 실행 (실물 FR3 스테이션과 같은 구조). 수식은 정책이 고른 튜브를 바꾸지 않습니다.
 - FR3 의 실물 평가 배치 재현 (10 배치 × 조명 5) 은 1,000 판 6 % → DAgger 28 % (VLA + 수식 64 → 86 %).
 
-**읽을 때 주의.** 시뮬 성공률은 실물 성공률의 예측이 아니라, 같은 시뮬 · 같은 물리에서 모델끼리 견주는 도구입니다. FR5 시뮬은 실물에 없는 쥐기 보조 (쥔 동안 붙이기) 에 기대고, FR3 시뮬 (Isaac 기본 Panda 모델) 에는 그 보조가 없습니다. 고정 배치는 사실상 배치 둘 × 25 장면이라, 처음 보는 자리에서의 성능은 무작위 배치로 읽습니다. 자세한 분석은 [보고서 4](docs/report04_sim_bench/README.md) · 진행 기록 [5](docs/report05_main_bench_stop/README.md) ~ [9](docs/report09_final_1116_1119/README.md).
+![FR5 · DAgger 뒤 정책만 — 꽂기 구간, 1배속, 왼쪽 3인칭 · 오른쪽 손목](figures/demo_fr5_dagger_insert_1x.gif)
+
+맨 위 영상과 같은 판의 FR5 꽂기 구간입니다 (DAgger 뒤 정책만, 1배속, 왼쪽 3인칭 · 오른쪽 손목). 수식의 도움 없이 정책이 빨간 칸 위에서 맞추고 꽂습니다.
+
+**읽을 때 주의.** 시뮬 성공률은 실물 성공률의 예측이 아니라, 같은 시뮬 · 같은 물리에서 모델끼리 견주는 도구입니다. FR5 시뮬은 실물에 없는 쥐기 보조 (쥔 동안 붙이기) 에 기대고, FR3 시뮬 (Isaac 기본 Panda 모델) 에는 그 보조가 없습니다. 고정 배치는 사실상 배치 둘 × 25 장면이라, 처음 보는 자리에서의 성능은 무작위 배치로 읽습니다. 자세한 분석은 [보고서 4](docs/report04_sim_bench/README.md) · 진행 기록 [5](docs/report05_main_bench_stop/README.md) \~ [9](docs/report09_final_1116_1119/README.md).
 
 ## 12. 로드맵
 
@@ -248,7 +273,10 @@ p(z_c)=b+\frac{z_c-b_z}{a_z}\,a,\qquad d=\big\lVert\,[p(z_c)-h]_{xy}\big\rVert\l
 - [x] 학습량 (batch size 64) · 물리 튐 규칙 · 단계별 진단 — [보고서 5](docs/report05_main_bench_stop/README.md) · [6](docs/report06_improve_1112_1113/README.md)
 - [x] 실물 맞춤 시뮬 (카메라 · 받침 높이 · 시작 자세 · 색) · 로봇마다 1,000 판 — [보고서 7](docs/report07_sim2real_1000/README.md)
 - [x] VLA + 수식 · S0 \~ S9 채점 · DAgger (FR5 · FR3) · FR5 영상 형식을 FR3 와 같게 — [보고서 4](docs/report04_sim_bench/README.md) · [8](docs/report08_dagger_1114_1116/README.md) · [9](docs/report09_final_1116_1119/README.md)
-- [ ] 실물과 같은 조건의 수식 점검 (카메라로 찾음) · VLA + 수식 보조 벤치 — 시험 기간 뒤
+
+차후 예정:
+
+- [ ] 실물과 같은 조건의 수식 (카메라로 찾음) 다시 점검 · VLA + 수식 보조 벤치 — 첫 점검은 11-19 ([보고서 9](docs/report09_final_1116_1119/README.md) 5 절)
 - [ ] 실물 FR5 평가 결과와 S0 \~ S9 비교
 - [ ] 다음 실험 하나 — DAgger 2 회차 · FR5 그리퍼 모델 단순화 · 노란 링 과제 · 강화학습 미세조정 · GR00T N2
 - [ ] 실물 적용 (Sim-to-Real)

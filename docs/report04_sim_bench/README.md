@@ -469,4 +469,4 @@ GR00T 의 action head 는 아래 손실을 줄이도록 학습한다 (GR00T N1 [
 | FR3 DAgger 대 복구 시연 | 고정 + 실물 평가 배치 재현 · VLA 단독 · 60 mm 들림, p < 0.05 | 다름 (16 → 86/100, p = 1.4 × 10⁻²⁴) |
 | VLA + 수식 넘김 조건 | 뚜껑 25 mm · 두 번째 뚜껑과 6 mm · 칸 25 mm (실험 중 고정) | — |
 
-이전 보고서: [보고서 3 — 실물 설정으로 다시 모은 짝 시연](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac/reports/03_realmatched_data) · 개발 기록: [BioTube-Insertion-VLA-IsaacLab](https://github.com/bbiyak12e/BioTube-Insertion-VLA-IsaacLab)
+이전 보고서: [보고서 3 — 실물 설정으로 다시 모은 짝 시연](https://github.com/SungjinDavidLee/BioRoboticsIsaacSim/tree/main/sim_isaac_tube/reports/03_realmatched_data) · 개발 기록: [BioTube-Insertion-VLA-IsaacLab](https://github.com/bbiyak12e/BioTube-Insertion-VLA-IsaacLab)
